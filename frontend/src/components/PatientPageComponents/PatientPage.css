@@ -1,0 +1,30 @@
+.patient-dashboard-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+  }
+  
+  .patient-main-content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .day-tasks-section{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* .patient-middle-section {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  .patient-right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 70%;
+  } */

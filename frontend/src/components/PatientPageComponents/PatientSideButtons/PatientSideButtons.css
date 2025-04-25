@@ -1,0 +1,48 @@
+.patient-side-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 25%;
+  }
+  
+  .patient-side-button {
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .patient-side-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .patient-test-btn {
+    background: linear-gradient(145deg, rgba(153, 204, 102, 0.8) 0%, rgba(37, 66, 34, 0.8) 100%);
+  }
+  
+  .patient-test-btn:hover {
+    background: linear-gradient(145deg, rgba(153, 204, 102, 1) 0%, rgba(37, 66, 34, 1) 100%);
+  }
+  
+  .patient-ai-btn {
+    background: linear-gradient(145deg, rgba(236, 226, 177, 0.8) 0%, rgba(37, 66, 34, 0.8) 100%);
+  }
+  
+  .patient-ai-btn:hover {
+    background: linear-gradient(145deg, rgba(236, 226, 177, 1) 0%, rgba(37, 66, 34, 1) 100%);
+  }
+  
+  .patient-info-btn {
+    background: linear-gradient(145deg, rgba(202, 228, 197, 0.8) 0%, rgba(37, 66, 34, 0.8) 100%);
+  }
+  
+  .patient-info-btn:hover {
+    background: linear-gradient(145deg, rgba(202, 228, 197, 1) 0%, rgba(37, 66, 34, 1) 100%);
+  }

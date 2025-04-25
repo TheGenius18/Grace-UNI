@@ -1,0 +1,224 @@
+.d-main-notifications-list {
+    width: 100%;
+    height: 70vh; 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    padding: 25px;
+    gap: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 198, 255, 0.5) rgba(34, 51, 61, 0.3);
+    background: linear-gradient(80deg, rgba(34, 51, 61, 0.3), transparent, rgba(34, 51, 61, 0.7));
+    border-radius: 12px;
+    box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.1),
+        0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.d-main-notifications-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.d-main-notifications-list::-webkit-scrollbar-track {
+    background: rgba(34, 51, 61, 0.3);
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.d-main-notifications-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 198, 255, 0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.d-main-notifications-list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+.d-main-notification {
+    width: 95%;
+    min-height: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(25, 69, 73, 0.9), rgba(34, 51, 61, 0.9));
+    border-radius: 15px;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    opacity: 0;
+    animation: notyslideIn 0.5s ease forwards;
+}
+
+.d-main-notification:nth-child(1) { animation-delay: 0.1s; }
+.d-main-notification:nth-child(2) { animation-delay: 0.2s; }
+.d-main-notification:nth-child(3) { animation-delay: 0.3s; }
+.d-main-notification:nth-child(4) { animation-delay: 0.4s; }
+.d-main-notification:nth-child(5) { animation-delay: 0.5s; }
+.d-main-notification:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes notyslideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.d-main-notification:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 6px 20px rgba(1, 37, 64, 0.8),
+        inset 0 1px 1px rgba(89, 140, 240, 0.5);
+    background: linear-gradient(90deg, rgba(25, 69, 73, 1), rgba(34, 51, 61, 1));
+}
+
+.d-main-notification.read {
+    opacity: 0.7;
+    background: linear-gradient(90deg, rgba(25, 69, 73, 0.6), rgba(34, 51, 61, 0.6));
+}
+
+.d-main-notification.read:hover {
+    opacity: 0.9;
+}
+
+.d-main-notification-img-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    margin: 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 2px 5px rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.d-main-notification:hover .d-main-notification-img-container {
+    transform: scale(1.05);
+    background-color: white;
+}
+
+.d-main-notification-img-container img {
+    height: 25px;
+    width: 25px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.d-main-notification:hover .d-main-notification-img-container img {
+    transform: rotate(10deg) scale(1.1);
+}
+
+.d-main-notification-text {
+    font-size: 16px;
+    font-weight: 400;
+    padding-right: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    flex: 1;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.d-main-notification:hover .d-main-notification-text {
+    color: white;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+.notification-indicator {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.d-main-notification:not(.read) .notification-indicator {
+    opacity: 1;
+    animation: notypulse 2s infinite;
+}
+
+@keyframes notypulse {
+    0% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.3); }
+    100% { transform: translateY(-50%) scale(1); }
+}
+
+.d-main-notification::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.d-main-notification:active::after {
+    animation: notyripple 0.6s ease-out;
+}
+
+@keyframes notyripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .d-main-notifications-list {
+        height: 75vh;
+        padding: 10px;
+    }
+    
+    .d-main-notification {
+        width: 100%;
+        min-height: 70px;
+        height: 70px;
+    }
+    
+    .d-main-notification-text {
+        font-size: 14px;
+        white-space: normal;
+    }
+    
+    .d-main-notification-img-container {
+        height: 40px;
+        width: 40px;
+        margin: 0 10px;
+    }
+}

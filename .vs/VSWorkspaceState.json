@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\API",
+    "\\backend\\backend",
+    "\\backend\\videocallAPI",
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\assets"
+  ],
+  "SelectedNode": "\\backend\\API\\urls.py",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,38 @@
+.main-container {
+    position: relative;
+    top: 5rem;
+    overflow: hidden;
+    margin-bottom: 5rem;
+    margin-left: 10rem;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.5s ease-in-out;
+  }
+  .main-container > .main-container-left {
+    margin-top: 7rem;
+  }
+  .main-container > .main-container-left > h3 {
+    color: #c0a9bd;
+  }
+  .main-container > .main-container-left > h1 {
+    font-size: 40px;
+  }
+  .main-container > .main-container-left > h4 {
+    margin-bottom: 40px;
+    color: #94a7ae;
+  }
+  .main-container > .main-container-left > a {
+    text-decoration: none;
+    border: 1px solid #c0a9bd;
+    border-radius: 20px;
+    padding: 10px 50px;
+    color: #94a7ae;
+    transition: 0.3s ease;
+  }
+  .main-container > .main-container-left > a:hover {
+    background-color: #c0a9bd;
+    color: white;
+  }
+  .main-container > .main-container-right > .main-container-image {
+    width: 80%;
+  }

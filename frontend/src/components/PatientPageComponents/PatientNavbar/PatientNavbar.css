@@ -1,0 +1,127 @@
+
+.patient-navbar {
+  background: rgba(37, 66, 34, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.patient-navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+
+.patient-navbar-logo {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.patient-navbar-logo:hover {
+  transform: scale(1.05);
+}
+
+.patient-nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.patient-nav-menu li {
+  position: relative;
+}
+
+.patient-nav-menu a {
+  color: #c8e6c9;
+  text-decoration: none;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  padding: 5px 0;
+  position: relative;
+}
+
+.patient-nav-menu a:hover {
+  color: #ffffff;
+}
+
+.patient-nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+}
+
+.patient-nav-menu a:hover::after {
+  width: 100%;
+}
+
+
+.patient-emergency-btn {
+  background-color: #ff4d4d;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.patient-emergency-btn:hover {
+  background-color: #ff1a1a;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
+}
+
+.patient-emergency-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.patient-emergency-btn:hover::before {
+  opacity: 1;
+}
+
+
+@media (max-width: 768px) {
+  .patient-navbar-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .patient-nav-menu {
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0;
+    align-items: center;
+  }
+
+  .patient-emergency-btn {
+    margin-top: 15px;
+  }
+}

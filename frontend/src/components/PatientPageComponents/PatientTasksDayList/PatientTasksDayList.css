@@ -1,0 +1,73 @@
+.day-tasks-container {
+  background: rgba(37, 66, 34, 0.5);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid rgba(236, 226, 177, 0.2);
+  width: 70%;
+}
+
+.day-tasks-tasks-title {
+  color: var(--accent-light);
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.day-tasks-tasks-list {
+  list-style: none;
+  padding: 0;
+}
+
+.day-tasks-task-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  background: rgba(202, 228, 197, 0.2);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.day-tasks-task-item:hover {
+  background: rgba(202, 228, 197, 0.3);
+  transform: translateX(5px);
+}
+
+.day-tasks-task-icon {
+  font-size: 20px;
+  margin-right: 15px;
+  width: 30px;
+  text-align: center;
+}
+
+.day-tasks-task-text {
+  flex: 1;
+  color: var(--accent-secondary);
+}
+
+.day-tasks-task-status {
+  color: var(--primary-light);
+  font-weight: bold;
+}
+
+.day-tasks-task-action {
+  background: rgba(153, 204, 102, 0.3);
+  border: 1px solid var(--primary-light);
+  color: var(--accent-light);
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.day-tasks-task-action:hover {
+  background: rgba(153, 204, 102, 0.5);
+}
+
+.completed {
+  opacity: 0.7;
+}
+
+.completed .day-tasks-task-text {
+  text-decoration: line-through;
+}
