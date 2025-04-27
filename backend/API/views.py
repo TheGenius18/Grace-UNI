@@ -10,6 +10,7 @@ from .models import Appointment, Patient, Therapist,Article, Comment
 from rest_framework.views import APIView
 from API.serializers import FullProfileSerializer, AppointmentSerializer
 from rest_framework.exceptions import PermissionDenied
+import requests
 class UserRegisterationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserRegistrationSerializer
@@ -216,7 +217,31 @@ class MarkTrainingCompleteView(APIView):
         return Response({"status": "completed"})
 
 
+class ChatbotMessageAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        serializer = ChatbotMessageSerializer(data=request.data)
+        if serializer.is_valid():
+            user_message = serializer.validated_data['message']
+            sender_id = str(request.user.id)
+
+            rasa_url = "http://localhost:5005/webhooks/rest/webhook"
+            payload = {
+                "sender": sender_id,
+                "message": user_message
+            }
+
+            try:
+                response = requests.post(rasa_url, json=payload, timeout=5)
+                if response.status_code == 200:
+                    return Response(response.json(), status=200)
+                else:
+                    return Response({"error": "Chatbot service error."}, status=502)
+            except requests.exceptions.RequestException:
+                return Response({"error": "Unable to connect to chatbot server."}, status=503)
+
+        return Response(serializer.errors, status=400)
 
 
 

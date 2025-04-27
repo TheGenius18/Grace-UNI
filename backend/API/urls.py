@@ -21,6 +21,7 @@ urlpatterns = [
     path('mytrainings/', MyTrainingsView.as_view(), name='my-trainings'),
     path('trainings/complete/', MarkTrainingCompleteView.as_view(), name='training-complete'),
     path("video/", include("videocallAPI.urls")),
+    path('chatbot/message/', ChatbotMessageAPIView.as_view(), name='chatbot-message'),
 
  
 ]

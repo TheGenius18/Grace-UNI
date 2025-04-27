@@ -158,3 +158,7 @@ class TrainingAssignmentSerializer(serializers.ModelSerializer):
             'is_completed'
         ]
         read_only_fields = ['assigned_at']
+
+
+class ChatbotMessageSerializer(serializers.Serializer):
+    message = serializers.CharField(max_length=1000)

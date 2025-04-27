@@ -30,7 +30,7 @@ class CreateSessionView(APIView):
             "created_at": session.created_at
         }, status=201)
 
-# Patient polls their upcoming sessions
+
 class MyInvitationsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
