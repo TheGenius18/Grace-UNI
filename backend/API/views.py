@@ -244,5 +244,21 @@ class ChatbotMessageAPIView(APIView):
         return Response(serializer.errors, status=400)
 
 
+class SaveDiagnosisView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def post(self, request):
+        user = request.user
+        diagnosis = request.data.get("diagnosis")
+
+        if not diagnosis:
+            return Response({"error": "No diagnosis provided."}, status=400)
+
+        try:
+            patient = Patient.objects.get(user=user)
+            patient.diagnosis = diagnosis
+            patient.save()
+            return Response({"message": "Diagnosis saved successfully."})
+        except Patient.DoesNotExist:
+            return Response({"error": "Patient profile not found."}, status=404)
 

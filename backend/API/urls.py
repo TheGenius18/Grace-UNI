@@ -2,7 +2,7 @@
 from .views import *
 from django.contrib import admin
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
-from .views import UserProfileView, AppointmentCreateView, AppointmentManageView, ArticleCreateView, ArticleListView, CommentCreateView, TrainingCreateView, TrainingAssignView, MyTrainingsView, MarkTrainingCompleteView
+from .views import SaveDiagnosisView,UserProfileView, AppointmentCreateView, AppointmentManageView, ArticleCreateView, ArticleListView, CommentCreateView, TrainingCreateView, TrainingAssignView, MyTrainingsView, MarkTrainingCompleteView
 
 urlpatterns = [
     path("register/", UserRegisterationAPIView.as_view(), name="register-user"),
@@ -22,6 +22,7 @@ urlpatterns = [
     path('trainings/complete/', MarkTrainingCompleteView.as_view(), name='training-complete'),
     path("video/", include("videocallAPI.urls")),
     path('chatbot/message/', ChatbotMessageAPIView.as_view(), name='chatbot-message'),
+    path('chatbot/save-diagnosis/', SaveDiagnosisView.as_view(), name='save-diagnosis'),
 
  
 ]
