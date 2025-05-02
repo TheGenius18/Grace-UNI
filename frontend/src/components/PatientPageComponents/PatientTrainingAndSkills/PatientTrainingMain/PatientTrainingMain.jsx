@@ -1,8 +1,11 @@
 import React ,{useContext,useState} from 'react';
 import Tools from './PatientTrainingTools/PatientTrainingTools';
 import Meditations from './PatientTrainingMesitations/PatientTrainingMesitations';
+<<<<<<< HEAD
 import RelaxingSounds from './PatientTrainingRelaxingSounds/PatientTrainingRelaxingSounds';
 
+=======
+>>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
 
 import "./PatientTrainingMain.css"
 
@@ -24,11 +27,14 @@ const PatientDashboard = () => {
                 <Meditations/>
             </div>
         :null}
+<<<<<<< HEAD
         {OnMenuChange=="sounds"?
             <div className="patient-relaxing-sounds">
                 <RelaxingSounds/>
             </div>
         :null}
+=======
+>>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
     </div>
   );
 };

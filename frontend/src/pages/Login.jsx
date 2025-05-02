@@ -1,44 +1,9 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Context } from "../context/context";
 
 import "../assets/css/Login/login.css";
-import FilLInfoForm from "../components/FillUserInfo/FillUserInfo"
-
-
-
 export default function Login() {
-  const {ItsHisFirstTime,setItsHisFirstTime}=useContext(Context);
-  const [UserType,setUserType]=useState("");
-
-  // useEffect(() => {
-    const checkLoggedInUser = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        if (token) {
-          const config = {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          };
-          const response = await axios.get(
-            "http://127.0.0.1:8000/api/user/",
-            config
-          );
-          // setLoggedIn(true);
-          setUserType(response.data.user_type);
-          console.log(response.data.user_type)
-        } else {
-          // setLoggedIn(false);
-          setUserType("");
-        }
-      } catch {
-        // setLoggedIn(false);
-        setUserType("");
-      }
-    };
-  // }, []); 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -71,15 +36,11 @@ export default function Login() {
       );
       console.log("Success!", response.data);
       setSccessMessage("Login Successfull");
-      localStorage.setItem("accessToken", response.data.tokens.access);
-      localStorage.setItem("refreshToken", response.data.tokens.refresh);
-      checkLoggedInUser();
-      if(!ItsHisFirstTime){
-        if(UserType=="therapist"){
-          window.location.href = "/therapist";
-        }
-        window.location.href = "/patient";
-      }
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.setItem("access_token", response.data.tokens.access);
+      localStorage.setItem("refresh_token", response.data.tokens.refresh);
+      window.location.href = "/patient";
     } catch (error) {
       console.log("Error during Login", error.response?.data);
       if (error.response && error.response.data) {
@@ -153,9 +114,6 @@ export default function Login() {
         </div>
         </div>
       </div>
-      {ItsHisFirstTime?
-        <FilLInfoForm/>
-      :null}
     </div>
   );
 }

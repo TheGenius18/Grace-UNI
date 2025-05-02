@@ -5,15 +5,13 @@ import Home from "./pages/Home";
 // import Layout from "./pages/Layout";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import EmergencyPage from "./components/EmergencyPage/EmergencyPage";
+import EmergencyPage from "./pages/EmergencyPage";
 import Diagnosis from "./components/DiagnosisPgeComponents/DiagnosisFrontPage/DiagnosisFrontPage";
 import Therapist from "./pages/TherapistPage";
 import Connection from "./pages/ConnectionPage";
 import ArticlesPage from "./pages/ArticlesPage";
 import FindMyTherapist from "./components/FindMyTherapist/FindMyTherapist";
 import Patient from "./components/PatientPageComponents/PatientPage";
-import FillInfo from "./components/FillUserInfo/FillUserInfo";
-
 
 
 
@@ -33,7 +31,6 @@ function App() {
         <Route path="findmytherapist" element={<FindMyTherapist />} />
         <Route path="patient" element={<Patient />} />
         <Route path="diary" element={<Diary />} />
-        <Route path="information" element={<FillInfo />} />
 
       </Routes>
     </BrowserRouter>

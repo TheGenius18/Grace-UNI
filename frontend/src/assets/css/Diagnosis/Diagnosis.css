@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* App Component Styles */
+>>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
 .diagnostic-app-container {
     display: flex;
     justify-content: center;
@@ -7,7 +11,11 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+<<<<<<< HEAD
     /* padding: 20px; */
+=======
+    padding: 20px;
+>>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
   }
   
   .diagnostic-app {
@@ -19,6 +27,10 @@
     transition: all 0.3s ease;
   }
   
+<<<<<<< HEAD
+=======
+  /* Background blur effect when results are shown */
+>>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
   /* .diagnostic-app.results-view {
     filter: blur(5px);
     pointer-events: none;

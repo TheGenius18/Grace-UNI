@@ -8,7 +8,11 @@ const MainMenu = () => {
         { id: 'therapy-training', label: 'Therapy Tools' },
         { id: 'self-care', label: 'Self Care' },
         { id: 'meditations', label: 'Meditations' },
+<<<<<<< HEAD
         { id: 'sounds', label: 'Relaxing Sounds' }
+=======
+        { id: 'treatment-tools', label: 'Relaxing Sounds' }
+>>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
     ];
 
     return (

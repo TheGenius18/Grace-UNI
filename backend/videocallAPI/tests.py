@@ -1,4 +1,5 @@
 from django.test import TestCase
+<<<<<<< HEAD
 from django.test import TestCase
 import json
 
@@ -156,3 +157,7 @@ class RoomTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["room_id"], "room3")
         self.assertEqual(Room.objects.get(id=3).title, "My New Room")
+=======
+
+# Create your tests here.
+>>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
