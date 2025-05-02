@@ -1,0 +1,173 @@
+.training-tools-cards-container {
+    wisth: 90%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: linear-gradient(135deg,rgba(207, 234, 234, 0.2) 0%,rgba(196, 197, 197, .2) 55%,rgba(190, 209, 209, 0.2) 100%);
+
+    box-sizing: border-box;
+}
+
+.training-tools-card {
+    position: relative;
+    background: linear-gradient(135deg,rgba(255, 255, 255, 0.87) 0%,rgba(154, 170, 175, 0.25) 100%);
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    z-index: 1;
+    min-height: 225px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.training-tools-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(0, 255, 255, 0.1) 30%,
+        rgba(0, 200, 255, 0.2) 50%,
+        rgba(0, 255, 255, 0.1) 70%,
+        transparent 100%
+    );
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+/* .training-card:hover::before {
+    animation: shine 1.5s ease forwards;
+} */
+
+/* @keyframes shine {
+    0% {
+        opacity: 0;
+        left: -50%;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0;
+        left: 150%;
+    }
+} */
+
+.training-tools-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(0, 255, 255, 0.05) 0%, 
+        rgba(0, 136, 255, 0.05) 100%);
+    z-index: -1;
+    border-radius: inherit;
+}
+
+.training-tools-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 8px 30px rgba(0, 200, 255, 0.3),
+                inset 0 0 15px rgba(255, 255, 255, 0.3);
+    border-color: rgba(0, 255, 255, 0.4);
+}
+
+.card-logo {
+    text-align: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+}
+
+.card-logo img {
+    max-width: 50px;
+    filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.3));
+    transition: all 0.3s ease;
+}
+
+.-toolstraining-card:hover .card-logo img {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.6));
+}
+
+.training-tools-title {
+    color: #005f73;
+    /* margin-bottom: 10px; */
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.training-tools-card:hover .training-tools-title {
+    color: #0088aa;
+    text-shadow: 0 0 8px rgba(0, 200, 255, 0.4);
+}
+
+.training-tools-description {
+    color:rgb(116, 120, 121);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.training-tools-card:hover .training-tools-description {
+    color: #222;
+}
+
+@keyframes card-pulse {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1),
+                    inset 0 0 10px rgba(255, 255, 255, 0.2),
+                    0 0 10px rgba(0, 200, 255, 0.1);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15),
+                    inset 0 0 15px rgba(255, 255, 255, 0.3),
+                    0 0 20px rgba(0, 200, 255, 0.2);
+    }
+}
+
+.training-tools-card {
+    animation: card-pulse 3s infinite ease-in-out;
+}
+
+.training-tools-card:hover {
+    animation: none;
+}
+
+@media (max-width: 1200px) {
+    .training-tools-cards-container {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .training-tools-cards-container {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .training-tools-cards-container {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+    }
+}

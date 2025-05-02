@@ -1,28 +1,32 @@
-import React from 'react';
+import React ,{useContext,useState} from 'react';
 import Navbar from './PatientNavbar/PatientNavbar';
-import MainButtons from './PatientMenu/PatientMenu';
-import DailyQuote from './PatintDailyQuote/PatintDailyQuote';
-import DayTasks from './PatientTasksDayList/PatientTasksDayList';
-import SideButtons from './PatientSideButtons/PatientSideButtons';
-import Footer from './PatientPageFooter/PatientPageFooter';
+import Main from './PatientMainComponents/PatientMain';
+import TrainingMenu from './PatientTrainingAndSkills/PatientTrainingMenu/PatientTrainingMenu';
+import TrainingMain from './PatientTrainingAndSkills/PatientTrainingMain/PatientTrainingMain';
+
 
 import './PatientPage.css';
+import { Context } from "../../context/context";
 
 const PatientDashboard = () => {
+    const {PMainChanger,setPMainChanger} = useContext(Context)
+
+
   return (
-    <div className="patient-dashboard-container">
+    <div className="patient-page-dashboard ">
       <Navbar />
-      <div className="patient-main-content">
-        <div className="patient-menu-patient-dashboard">
-        <MainButtons />
-        </div>
-        <DailyQuote />
-        <div className="day-tasks-section">
-        <DayTasks />
-        <SideButtons />
-        </div>
-        <Footer/>
-      </div>
+      {PMainChanger=="main"?
+            <div className="patient-main">
+                <Main/>
+            </div>
+        :null}
+        {PMainChanger=="training"?
+            <div className="patient-training">
+                <TrainingMenu/>
+                <TrainingMain/>
+            </div>
+        :null}
+        
     </div>
   );
 };

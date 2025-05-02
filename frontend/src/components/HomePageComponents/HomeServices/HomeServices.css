@@ -1,74 +1,226 @@
 .services-container {
-    text-align: center;
-    transition: 0.5s;
-    width: 100vw;
-    height: 120vh;
-    padding-top: 100px;
-    margin-bottom: 1rem;
-    background-color: #fcfcfc;
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px 20px;
+  background-color:rgb(211, 211, 211);
+  position: relative;
+  overflow: hidden;
+}
+
+.services-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.services-subtitle {
+  color:rgb(7, 59, 59);
+  font-size: 1.2rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  animation: neonPulse 2s infinite alternate;
+}
+
+.services-title {
+  color:rgb(3, 44, 44);
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.title-underline {
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent,rgba(0, 255, 255, 0.57), transparent);
+  margin: 0 auto;
+  border-radius: 3px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.service-box {
+  background: linear-gradient(135deg, transparent,rgba(70, 96, 96, 0.2), transparent);
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgb(0, 95, 95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 255, 255, 0.1);
+  border: 1px solid rgb(0, 255, 255);
+}
+
+.service-box.featured {
+  background: linear-gradient(135deg, transparent,rgba(70, 96, 96, 0.2), transparent);
+  border: 1px solid rgb(0, 95, 95);
+  transform: translateY(-20px);
+}
+
+.service-box.featured::before {
+  content: 'Featured';
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #00ffff;
+  color: #121212;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.service-icon-container {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 25px;
+  position: relative;
+}
+
+.service-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.49));
+  position: relative;
+  z-index: 2;
+}
+
+/* .icon-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.16) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: glowPulse 3s infinite alternate;
+} */
+
+.service-box h3 {
+  color:rgb(6, 62, 81);
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.service-box h3::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background:rgba(5, 34, 70, 0.2);
+}
+
+.service-box p {
+  color:rgb(6, 36, 48);
+  line-height: 1.6;
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+.service-btn {
+  background: transparent;
+  color:rgb(28, 81, 99);
+  border: 2px solid rgb(7, 80, 93);
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-btn span {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+  top: 0;
+  left: -100%;
+  transition: 0.5s;
+}
+
+.service-btn:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.service-btn:hover .btn-glow {
+  left: 100%;
+}
+
+@keyframes neonPulse {
+  0% {
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
   }
-  .services-container h2 {
-    color: #c0a9bd;
-    font-weight: 400;
+  100% {
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.8), 0 0 25px rgba(0, 255, 255, 0.4);
   }
-  .services-container h1 {
-    color: #94a7ae;
-    font-size: 45px;
-    margin-top: 10px;
+}
+
+@keyframes glowPulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.95);
   }
-  .services-container .row {
-    padding-top: 50px;
-    width: 1000px;
-    margin: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  100% {
+    opacity: 0.8;
+    transform: scale(1.05);
   }
-  .services-container .box {
-    width: 320px;
-    height: 500px;
-    margin-right: 40px;
-    background: #fff;
-    border-radius: 20px;
-    border: 1px solid #c0a9bd;
-    transition: 0.1s ease;
-  }
-  .services-container .box:hover {
-    border: 2px solid #c0a9bd;
-  }
-  .services-container #special-box {
-    margin-top: 10%;
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    max-width: 500px;
   }
   
-  .services-container .box img {
-    width: 250px;
+  .services-title {
+    font-size: 2rem;
   }
-  .services-container .box h3 {
-    font-size: 25px;
-    padding-top: 20px;
-    color: #64766a;
+  
+  .service-box {
+    padding: 30px 20px;
   }
-  .services-container .box p {
-    color: #94a7ae;
-    padding-top: 20px;
-    line-height: 25px;
-  }
-  .services-container .box .btn {
-    width: 150px;
-    height: 40px;
-    background: #c0a9bd;
-    border-radius: 10px;
-    border: none;
-    color: #fff;
-    font-size: 17px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 20px;
-    transition: 0.3s ease;
-    text-transform: uppercase;
-  }
-  .services-container .box .btn:hover {
-    background-color: #fff;
-    color: #c0a9bd;
-    border: 1px solid #c0a9bd;
-  }
+}

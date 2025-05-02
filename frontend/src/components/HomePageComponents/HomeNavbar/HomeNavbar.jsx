@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const checkLoggedInUser = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
+        const token = localStorage.getItem("access_token");
         if (token) {
           const config = {
             headers: {
@@ -73,7 +73,7 @@ export default function Home() {
 <div className="nav-container">
         <div className="nav-logo">
           <img
-            src="src\assets\images\5.png"
+            src="src\assets\images\2.png"
             alt="logo"
             style={{ cursor: "pointer" }}
           />
@@ -83,7 +83,7 @@ export default function Home() {
           <i className="fa solid fa-xmark close-menu"></i>
           <ul className="nav-links">
             <li className="nav-link-item">
-              <a href="#" style={{ color: "#c0a9bd" }}>
+              <a href="#">
                 Home
               </a>
             </li>

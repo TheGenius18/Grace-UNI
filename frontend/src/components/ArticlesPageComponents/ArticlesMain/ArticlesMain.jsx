@@ -25,7 +25,6 @@ const ArticlesPage = () => {
     },
   ]);
 
-  // Handle like/love interactions
   const handleReaction = (id, reactionType) => {
     setArticles(articles.map(article => {
       if (article.id === id) {

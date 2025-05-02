@@ -1,0 +1,132 @@
+.patient-page-tasks-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0, 150, 200, 0.1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(0, 180, 220, 0.1);
+}
+
+.patient-page-tasks-title {
+  color: #00a3b5;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+.patient-page-tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.patient-page-task-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 180, 220, 0.1);
+}
+
+.patient-page-task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 180, 220, 0.15);
+  border-color: rgba(0, 180, 220, 0.3);
+}
+
+.patient-page-task-item.patient-page-completed {
+  background: rgba(0, 180, 220, 0.05);
+  border-color: rgba(0, 180, 220, 0.2);
+}
+
+.patient-page-task-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.patient-page-task-text {
+  flex-grow: 1;
+  color: #0c2d39;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.patient-page-completed .patient-page-task-text {
+  color: #6b7280;
+  text-decoration: line-through;
+}
+
+.patient-page-task-status {
+  margin-left: 1rem;
+}
+
+.patient-page-checkmark {
+  color: #00a3b5;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.patient-page-task-action {
+  padding: 0.5rem 1rem;
+  background: #00a3b5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.patient-page-task-action:hover {
+  background: #008c9e;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 163, 181, 0.3);
+}
+
+@keyframes taskComplete {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.patient-page-task-item.patient-page-completed {
+  animation: taskComplete 0.5s ease;
+}
+
+@media (max-width: 768px) {
+  .patient-page-tasks-container {
+    padding: 1rem;
+    margin: 1rem;
+  }
+  
+  .patient-page-tasks-title {
+    font-size: 1.5rem;
+  }
+  
+  .patient-page-task-item {
+    padding: 0.8rem 1rem;
+  }
+  
+  .patient-page-task-icon {
+    font-size: 1.3rem;
+    margin-right: 0.8rem;
+  }
+  
+  .patient-page-task-text {
+    font-size: 1rem;
+  }
+}

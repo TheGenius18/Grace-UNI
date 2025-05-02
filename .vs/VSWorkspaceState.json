@@ -1,14 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\backend",
-    "\\backend\\API",
-    "\\backend\\backend",
-    "\\backend\\videocallAPI",
     "\\frontend",
     "\\frontend\\src",
-    "\\frontend\\src\\assets"
+    "\\frontend\\src\\components",
+    "\\frontend\\src\\components\\ArticlesPageComponents",
+    "\\frontend\\src\\components\\Connectionpage",
+    "\\frontend\\src\\components\\HomePageComponents",
+    "\\frontend\\src\\components\\TherapistPageComponents",
+    "\\frontend\\src\\components\\TherapistPageComponents\\Dnav",
+    "\\frontend\\src\\pages"
   ],
-  "SelectedNode": "\\backend\\API\\urls.py",
+  "SelectedNode": "\\backend\\API\\models.py",
   "PreviewInSolutionExplorer": false
 }

@@ -36,9 +36,11 @@ export default function Login() {
       );
       console.log("Success!", response.data);
       setSccessMessage("Login Successfull");
-      localStorage.setItem("accessToken", response.data.tokens.access);
-      localStorage.setItem("refreshToken", response.data.tokens.refresh);
-      window.location.href = "/home";
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.setItem("access_token", response.data.tokens.access);
+      localStorage.setItem("refresh_token", response.data.tokens.refresh);
+      window.location.href = "/patient";
     } catch (error) {
       console.log("Error during Login", error.response?.data);
       if (error.response && error.response.data) {
@@ -55,16 +57,16 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="container">
+    <div className="login-page-container">
+      <div className="login-page-main">
         <form onSubmit={handleSubmit}>
-          <div className="title">Login</div>
+          <div className="login-page-title">Login</div>
           {error ? (
             <p style={{ color: "red" }}>{error}</p>
           ) : (
             <p style={{ color: "green" }}>{succesMessage}</p>
           )}
-          <div className="input-box underline">
+          <div className="login-page-input-box login-page-underline">
             <input
               type="email"
               name="email"
@@ -73,9 +75,9 @@ export default function Login() {
               onChange={handleChange}
               required
             />
-            <div className="underline"></div>
+            <div className="login-page-underline"></div>
           </div>
-          <div className="input-box">
+          <div className="login-page-input-box">
             <input
               type="password"
               name="password"
@@ -84,30 +86,32 @@ export default function Login() {
               onChange={handleChange}
               required
             />
-            <div className="underline"></div>
+            <div className="login-page-underline"></div>
           </div>
 
-          <div className="input-box button">
+          <div className="login-page-input-box login-page-button">
             <a href="home">
               <input type="submit" name="" value="LOGIN" />
             </a>
           </div>
         </form>
-        <div className="option">
+        <div className="login-page-option">
           dont have an account ?{" "}
-          <a href="/register" style={{ textDecoration: "none" }}>
+          <a className="login-page-option-now" href="/register" style={{ textDecoration: "none" }}>
             Register Now !
           </a>
         </div>
-        <div className="twitter">
+        <div className="login-page-social-login">
+        <div className="login-page-twitter">
           <a href="#">
             <i className="fab fa-twitter"></i>Sign in With Twitter
           </a>
         </div>
-        <div className="facebook">
+        <div className="login-page-facebook">
           <a href="#">
             <i className="fab fa-facebook-f"></i>Sign in With Facebook
           </a>
+        </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,126 @@
+.training-menu-container {
+    width: 70%;
+    margin: 1.2rem auto;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: linear-gradient(135deg,rgba(231, 239, 239, 0.2) 0%,rgba(223, 223, 223, 0.2) 55%,rgba(211, 226, 226, 0.2) 100%);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.2),
+        inset 0 0 12px rgba(0, 242, 254, 0.1);
+    border: 1px solid rgba(0, 242, 254, 0.08);
+}
+
+.training-main-menu {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.training-page-menu-button {
+    position: relative;
+    background: transparent;
+    border: none;
+    color:rgb(15, 143, 168);
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    z-index: 1;
+}
+
+.training-page-menu-button::before {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #00f2fe;
+    transition: all 0.3s ease-out;
+}
+
+.training-page-menu-button:hover {
+    color: #003d57;
+    transform: translateY(-3px);
+    text-shadow: 0 2px 4px rgba(5, 135, 142, 0.1);
+    /* border: 1px solid rgba(0, 242, 254, 0.8); */
+}
+
+.training-page-menu-button:hover::before {
+    width: 60%;
+}
+
+.training-page-menu-button.active {
+    color: #003d57;
+    font-weight: 700;
+}
+
+.training-page-menu-button.active::before {
+    width: 80%;
+    background: #00a2ff;
+    height: 3px;
+    bottom: -1px;
+}
+
+.training-page-menu-button::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 242, 254, 0.3);
+    border-radius: 50%;
+    transition: all 0.3s ease-out;
+}
+
+.training-page-menu-button:hover::after {
+    background: rgba(0, 242, 254, 0.6);
+    transform: translateX(-50%) scale(1.2);
+}
+
+.training-page-menu-button.active::after {
+    background: #00f2fe;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.7);
+    transform: translateX(-50%) scale(1.5);
+    bottom: -14px;
+}
+
+.training-page-connector-dot {
+    position: absolute;
+    bottom: -12px;
+    height: 6px;
+    width: 6px;
+    background: rgba(0, 242, 254, 0.2);
+    border-radius: 50%;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    .training-menu-container {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    .training-main-menu {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .training-page-menu-button {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+    }
+    
+    .training-page-menu-button::before,
+    .training-page-menu-button::after {
+        display: none;
+    }
+}

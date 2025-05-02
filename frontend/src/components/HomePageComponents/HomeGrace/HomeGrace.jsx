@@ -35,8 +35,8 @@ export default function Home() {
         setUsername("");
       }
     };
-    checkLoggedInUser(); // Call the function here
-  }, []); // Add an empty dependency array to run only once
+    checkLoggedInUser();
+  }, []); 
 
   const handleLogout = async () => {
     try {
@@ -82,16 +82,13 @@ export default function Home() {
             <br /> The Things you look at Change .
           </h1>
           <h4>ALAHMER</h4>
-          <a href="/login" id="button-of-main-content">
-            Try it !
-          </a>
         </div>
         <div className="main-container-right">
           <div className="main-container-image">
             <img
-              src="src/assets/images/9.png"
+              src="src/assets/images/4.png"
               alt="Grace-PIC"
-              style={{ width: "100%" }}
+              style={{ width: "120%" }}
             />
           </div>
         </div>

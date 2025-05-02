@@ -54,22 +54,21 @@ export default function Register() {
       setIsLoading(false);
     }
   };
-  // {error && <p style={{ color: "red" }}>{error}</p>}
-  // {succesMessage && <p style={{ color: "green" }}>{succesMessage}</p>}
+
   return (
-    <div className="register-container">
-      <div className="container">
-        <div className="title">Registration</div>
+    <div className="register-page-container">
+      <div className="register-page-main">
+        <div className="register-page-title">Registration</div>
         {error ? (
           <p style={{ color: "red" }}>{error}</p>
         ) : (
           <p style={{ color: "green" }}>{succesMessage}</p>
         )}
-        <div className="content">
+        <div className="register-page-content">
           <form onSubmit={handleSubmit}>
-            <div className="user-details">
-              <div className="input-box">
-                <span className="details">Username</span>
+            <div className="register-page-user-details">
+              <div className="register-page-input-box">
+                <span className="register-page-details">Username</span>
                 <input
                   type="text"
                   name="username"
@@ -77,8 +76,8 @@ export default function Register() {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-box">
-                <span className="details">Email</span>
+              <div className="register-page-input-box">
+                <span className="register-page-details">Email</span>
                 <input
                   type="email"
                   name="email"
@@ -87,8 +86,8 @@ export default function Register() {
                 />
               </div>
 
-              <div className="input-box">
-                <span className="details">Password</span>
+              <div className="register-page-input-box">
+                <span className="register-page-details">Password</span>
                 <input
                   type="password"
                   name="password"
@@ -96,8 +95,8 @@ export default function Register() {
                   onChange={handleChange}
                 />
               </div>
-              <div className="input-box">
-                <span className="details">Confirm Password</span>
+              <div className="register-page-input-box">
+                <span className="register-page-details">Confirm Password</span>
                 <input
                   type="password"
                   name="passwordcheck"
@@ -107,7 +106,7 @@ export default function Register() {
               </div>
             </div>
 
-            <div className="button">
+            <div className="register-page-button">
               <input type="submit" value="Register" />
             </div>
           </form>

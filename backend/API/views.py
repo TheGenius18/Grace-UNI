@@ -226,19 +226,23 @@ class ChatbotMessageAPIView(APIView):
             user_message = serializer.validated_data['message']
             sender_id = str(request.user.id)
 
-            rasa_url = "http://localhost:5005/webhooks/rest/webhook"
+            rasa_url = "http://127.0.0.1:5005/webhooks/rest/webhook"
+
+
+
             payload = {
                 "sender": sender_id,
                 "message": user_message
             }
 
             try:
-                response = requests.post(rasa_url, json=payload, timeout=5)
+                response = requests.post(rasa_url, json=payload, timeout=15)
                 if response.status_code == 200:
                     return Response(response.json(), status=200)
                 else:
                     return Response({"error": "Chatbot service error."}, status=502)
-            except requests.exceptions.RequestException:
+            except requests.exceptions.RequestException as e:
+                print(" Error connecting to Rasa:", str(e))
                 return Response({"error": "Unable to connect to chatbot server."}, status=503)
 
         return Response(serializer.errors, status=400)
