@@ -1,0 +1,243 @@
+.emergency-component{
+    background:linear-gradient(135deg,rgb(1, 23, 33),rgb(73, 1, 1),rgb(0, 85, 85));
+}
+
+
+.emergency-component-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* max-width: 1200px; */
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+  
+  .emergency-component-title {
+    color: #00ffff;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 5px rgb(93, 6, 6), 0 0 10px rgb(105, 5, 5);
+    /* animation: emergency-component-pulse 2s infinite alternate; */
+  }
+  
+  .emergency-component-section-title {
+    color: #00ffff;
+    border-bottom: 1px solid #00ffff;
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+    font-size: 1.8rem;
+  }
+  
+  .emergency-component-emergency-title {
+    color: #ff5555;
+    font-size: 1.6rem;
+    margin-top: 1.5rem;
+    text-shadow: 0 0 3px #ff5555;
+  }
+  
+  .emergency-component-subtitle {
+    color: #00ffff;
+    margin-top: 1rem;
+    font-size: 1.3rem;
+  }
+  
+  .emergency-component-text {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .emergency-component-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  .emergency-component-card {
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .emergency-component-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg,rgb(29, 1, 1),rgb(45, 0, 0),rgba(0, 118, 118, 0.34));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .emergency-component-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 255, 0.2);
+  }
+  
+  .emergency-component-card:hover::before {
+    opacity: 0.4;
+    /* animation: emergency-component-borderGlow 2s infinite; */
+  }
+  
+  .emergency-component-card-title {
+    color: #00ffff;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+  }
+  
+  .emergency-component-card-description {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+  }
+  
+  .emergency-component-detail {
+    pading:100px 0 0 0;
+    background: #2a2a2a;
+    border-radius: 8px;
+    /* padding: 2rem; */
+    padding:5rem 2rem 2rem 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+    border: 1px solid #333;
+    animation: emergency-component-fadeIn 0.5s ease;
+  }
+  
+  .emergency-component-advice-list {
+    margin-left: 1.5rem;
+  }
+  
+  .emergency-component-advice-item {
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  
+  .emergency-component-advice-item::before {
+    content: '→';
+    color: #00ffff;
+    position: absolute;
+    left: 0;
+  }
+  
+  .emergency-component-notify-button {
+    background: linear-gradient(45deg,rgb(52, 9, 9),rgb(31, 0, 0));
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    box-shadow: 0 0 10px rgba(255, 85, 85, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .emergency-component-notify-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(255, 85, 85, 0.8);
+  }
+  
+  .emergency-component-notify-button:disabled {
+    background: #00aa00;
+    cursor: not-allowed;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+  }
+  
+  .emergency-component-notify-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: all 0.3s ease;
+  }
+  
+  .emergency-component-notify-button:hover::after {
+    left: 100%;
+  }
+  
+  /* Crisis Support */
+  .emergency-component-crisis-support {
+    background: rgba(255, 85, 85, 0.1);
+    border-left: 4px solid #ff5555;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    border-radius: 0 8px 8px 0;
+  }
+  
+  .emergency-component-crisis-list {
+    margin-top: 1rem;
+  }
+  
+  .emergency-component-crisis-item {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  
+  .emergency-component-crisis-item::before {
+    content: '⚠️';
+    position: absolute;
+    left: 0;
+  }
+  
+  /* Animations */
+  @keyframes emergency-component-pulse {
+    0% {
+      text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+    }
+    100% {
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #0088ff;
+    }
+  }
+  
+  @keyframes emergency-component-borderGlow {
+    0% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0.8;
+    }
+    100% {
+      opacity: 0.5;
+    }
+  }
+  
+  @keyframes emergency-component-fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .emergency-component-list {
+      grid-template-columns: 1fr;
+    }
+  }

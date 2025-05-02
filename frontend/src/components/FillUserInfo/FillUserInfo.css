@@ -1,0 +1,349 @@
+
+.fill-info-form {
+    max-width: 700px;
+    width: 100%;
+    padding: 30px;
+    background: rgba(50, 52, 55, 0.85);
+    padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+    animation: fill-info-fadeIn 0.8s ease-out;
+    
+  }
+  
+  @keyframes fill-info-fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fill-info-form-group {
+    margin-bottom: 25px;
+    animation: fill-info-slideIn 0.5s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .fill-info-form-group:nth-child(1) { animation-delay: 0.1s; }
+  .fill-info-form-group:nth-child(2) { animation-delay: 0.2s; }
+  .fill-info-form-group:nth-child(3) { animation-delay: 0.3s; }
+  .fill-info-form-group:nth-child(4) { animation-delay: 0.4s; }
+  
+  @keyframes fill-info-slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .fill-info-form-title{
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    color: #ffffff;
+    margin-bottom: 30px;
+    text-shadow: 0 0 9px rgba(17, 196, 193, 1);
+  }
+  .fill-info-form-title::before{
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    height: 3px;
+    width: 45%;
+    border-radius: 5px;
+    background: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  }
+
+  .fill-info-form-desc{
+    font-size: 18px;
+    font-weight: 400;
+    position: relative;
+    margin: 20px;
+    color:rgb(178, 182, 182);
+    text-shadow: 0 0 5px rgba(0, 221, 255, 0.5);
+  }
+
+  .fill-info-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color:rgb(0, 234, 255);
+  }
+  
+  .fill-info-form input[type="number"],
+  .fill-info-form select {
+    height: 50px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 8px;
+  padding-left: 15px;
+  background: rgba(60, 62, 65, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transition: all 0.3s ease;
+  }
+  
+  .fill-info-form input[type="number"]:focus,
+  .fill-info-form select:focus {
+    outline: none;
+    border-color: #00bcd4;
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+  }
+  
+  .fill-info-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  .fill-info-radio-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background-color:transparent;
+    border: 1px solid rgb(0, 255, 255);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+
+  }
+  
+  .fill-info-radio-group label:hover {
+    background-color:rgba(0, 217, 255, 0.68);
+    color: #333333;
+  }
+  
+  .fill-info-radio-group input[type="radio"] {
+    margin-right: 8px;
+    accent-color: #00bcd4;
+  }
+  
+  .fill-info-submit-btn {
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    animation: fill-info-pulse 2s infinite;
+  }
+  
+  .fill-info-submit-btn:hover {
+    background-color: #0097a7;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
+  }
+  
+  @keyframes fill-info-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(0, 188, 212, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(0, 188, 212, 0);
+    }
+  }
+  
+  /* Background styles */
+  .fill-info-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('your-logo.png');
+    background-size: 30%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.1;
+    filter: blur(8px);
+    z-index: -1;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .fill-info-form {
+      margin: 20px;
+      padding: 20px;
+    }
+    
+    .fill-info-radio-group {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+
+
+
+
+
+
+
+  /* Add these new styles to your existing CSS file */
+
+/* File upload input styling */
+.fill-info-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  background: rgba(60, 62, 65, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.fill-info-form input[type="file"]:focus {
+  outline: none;
+  border-color: #00bcd4;
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+}
+
+.fill-info-form input[type="file"]::file-selector-button {
+  padding: 8px 12px;
+  background: rgba(0, 188, 212, 0.3);
+  border: 1px solid #00bcd4;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.fill-info-form input[type="file"]::file-selector-button:hover {
+  background: rgba(0, 188, 212, 0.5);
+}
+
+/* Text input styling (for education, specialization, etc.) */
+.fill-info-form input[type="text"] {
+  height: 50px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 8px;
+  padding-left: 15px;
+  background: rgba(60, 62, 65, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.fill-info-form input[type="text"]:focus {
+  outline: none;
+  border-color: #00bcd4;
+  box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+}
+
+/* Additional animation delays for new form groups */
+.fill-info-form-group:nth-child(5) { animation-delay: 0.5s; }
+.fill-info-form-group:nth-child(6) { animation-delay: 0.6s; }
+.fill-info-form-group:nth-child(7) { animation-delay: 0.7s; }
+.fill-info-form-group:nth-child(8) { animation-delay: 0.8s; }
+.fill-info-form-group:nth-child(9) { animation-delay: 0.9s; }
+
+/* Language input specific styling */
+.fill-info-form input[name="language"] {
+  background: rgba(60, 62, 65, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 15px;
+}
+
+/* CV upload section styling */
+.fill-info-form-group:has(input[type="file"]) {
+  padding: 15px;
+  background: rgba(60, 62, 65, 0.3);
+  border-radius: 8px;
+  border: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+.fill-info-form-group:has(input[type="file"]):hover {
+  border-color: rgba(0, 255, 255, 0.6);
+  background: rgba(60, 62, 65, 0.4);
+}
+
+/* Responsive adjustments for therapist form */
+@media (max-width: 768px) {
+  .fill-info-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .fill-info-form input[type="text"],
+  .fill-info-form input[type="number"],
+  .fill-info-form select {
+    height: 45px;
+    font-size: 15px;
+  }
+  
+  .fill-info-form-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .fill-info-form-desc {
+    font-size: 16px;
+    margin: 15px 0;
+  }
+}
+
+/* File upload preview styling (optional) */
+.file-upload-preview {
+  margin-top: 10px;
+  padding: 8px;
+  background: rgba(0, 188, 212, 0.1);
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.file-upload-preview svg {
+  margin-right: 8px;
+  color: #00bcd4;
+}
+
+/* Additional spacing for longer form */
+.fill-info-form {
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 188, 212, 0.5) transparent;
+}
+
+.fill-info-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fill-info-form::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fill-info-form::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 188, 212, 0.5);
+  border-radius: 3px;
+}

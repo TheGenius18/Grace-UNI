@@ -1,0 +1,234 @@
+.diagnosis-ai-container {
+    display: flex;
+    flex-direction: column;
+    /* min-height: 100vh; */
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    padding: 2rem;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  .header-row {
+    text-align: center;
+    /* margin-bottom: 3rem; */
+    padding: 2rem;
+    /* background: rgba(255, 255, 255, 0.8); */
+    backdrop-filter: blur(10px);
+    /* border-radius: 16px; */
+    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); */
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  .header-row h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #00a3c4, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: slideUp 0.6s ease-out;
+  }
+  
+  .header-row p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #4a5568;
+    max-width: 700px;
+    margin: 0 auto;
+    animation: fadeIn 1s ease-out 0.2s both;
+  }
+  
+  .content-row {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+  }
+  
+  .what-to-expect {
+    flex: 1;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    animation: slideInLeft 0.6s ease-out;
+  }
+  
+  .what-to-expect h2 {
+    font-size: 1.8rem;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  
+  .what-to-expect h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #00a3c4, #00d4ff);
+    border-radius: 3px;
+  }
+  
+  .what-to-expect ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .what-to-expect li {
+    padding: 0.8rem 0;
+    color: #4a5568;
+    position: relative;
+    padding-left: 1.8rem;
+    line-height: 1.5;
+    font-size: 1.05rem;
+  }
+  
+  .what-to-expect li::before {
+    content: '•';
+    color: #00a3c4;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+  }
+  
+  .buttons-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: slideInRight 0.6s ease-out;
+  }
+  
+  .diagnosis-buttons {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .diag-button {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .diag-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+  }
+  
+  .diag-button:hover::before {
+    opacity: 1;
+  }
+  
+  .ai-button {
+    background: linear-gradient(135deg, #00a3c4 0%, #00d4ff 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+  }
+  
+  .ai-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 180, 216, 0.4);
+  }
+  
+  .form-button {
+    background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(113, 128, 150, 0.3);
+  }
+  
+  .form-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(113, 128, 150, 0.4);
+  }
+  
+  .diag-button:disabled {
+    background: #cbd5e0;
+    transform: none !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+  }
+  
+  .button-explanation {
+    color: #718096;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideInLeft {
+    from { 
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideInRight {
+    from { 
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .content-row {
+      flex-direction: column;
+    }
+    
+    .header-row h1 {
+      font-size: 2rem;
+    }
+    
+    .header-row p {
+      font-size: 1rem;
+    }
+  }

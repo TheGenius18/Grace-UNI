@@ -1,0 +1,98 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(45deg, #fdd2f8, #c279ca);
+    font-family: 'Poppins', sans-serif;
+}
+
+.diary-container {
+    width: 100%;
+    padding: 20px;
+}
+
+.container {
+    position: relative;
+    width: 1200px;
+    min-height: 720px;
+    margin: 0 auto;
+    padding: 5px;
+    color: #fff;
+    display: flex;
+    border-radius: 10px;
+    background-color: #28012a;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.container.wait {
+    filter: blur(15px);
+    pointer-events: none;
+}
+
+.left {
+    width: 60%;
+    padding: 20px;
+}
+
+.right {
+    position: relative;
+    width: 40%;
+    min-height: 100%;
+    padding: 20px 0;
+    background-color: rgba(40, 1, 42, 0.9);
+}
+
+@media (max-width: 1200px) {
+    .container {
+        width: 95%;
+        flex-direction: column;
+    }
+    
+    .left, .right {
+        width: 100%;
+    }
+    
+    .tasks-list {
+        width: 95%;
+    }
+    
+    .tasks-list-button {
+        width: calc(33% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .tasks-list-button {
+        width: calc(50% - 20px);
+    }
+    
+    .weekdays div {
+        font-size: 0.8rem;
+    }
+    
+    .time {
+        height: 70px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tasks-list-button {
+        width: 100%;
+    }
+    
+    .diary .title {
+        padding: 30px 10px;
+        font-size: 1rem;
+    }
+    
+    .today-date {
+        padding-left: 40px;
+    }
+} */

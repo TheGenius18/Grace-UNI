@@ -1,0 +1,43 @@
+.Connection-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(34, 51, 61, 0.6);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--light-teal);
+  }
+  
+  .Connection-navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-gold);
+  }
+  
+  .Connection-quick-exit-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-right: 10px;
+  }
+  
+  .Connection-quick-exit-btn:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+  }
+  .Connection-dark-mode-toggle{
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-right: 10px;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+
+  }

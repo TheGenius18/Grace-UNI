@@ -1,0 +1,96 @@
+.d-main-hi-grace-cards{
+    width: 60vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.d-main-hi-grace-card{
+    height: 200px;
+    padding: 15px;
+    background: linear-gradient(
+        145deg,
+        rgba(34, 51, 61, 0.95),
+        rgba(34, 51, 61, 0.85),
+        rgba(34, 51, 61, 0.95)
+      );
+      background-color: #e2e6eb;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.d-main-hi-grace-card img{
+    width: 35px;
+    padding: 5px;
+    position: absolute;
+    background-color: white;
+    border-radius: 20px;
+    bottom: 10px;
+    right: 10px;
+}
+
+.d-main-hi-grace-card p{
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.d-main-hi-grace-card:hover{
+    background: linear-gradient(
+        145deg,
+        rgba(34, 51, 61, 0.95),
+        rgba(34, 51, 61, 0.85),
+        rgba(34, 51, 61, 0.95)
+      );
+}
+
+.d-main-hi-grace-bottom{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    max-width: 900px;
+    padding: 0px 20px;
+    margin: auto;
+}
+
+.d-main-hi-grace-bottom .d-main-hi-grace-search-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: rgba(34, 51, 61, 0.5);
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+.d-main-hi-grace-search-box img{
+    width: 24px;
+    cursor: pointer;
+    filter: brightness(0) invert(1);
+
+}
+
+.d-main-hi-grace-search-box input{
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.d-main-hi-grace-search-box .d-main-hi-grace-icons{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.d-main-hi-grace-bottom-info{
+    font-size: 13px;
+    margin: 15px auto;
+    text-align: center;
+    font-weight: 300;
+    color: #95adb7;
+}

@@ -1,0 +1,196 @@
+/* TasksInput.css */
+.add-event-wrapper {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    width: 80%;
+    max-height: 0;
+    overflow: hidden;
+    border-radius: 5px;
+    background-color: #fff;
+    transform: translateX(-50%);
+    transition: max-height 0.5s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.add-event-wrapper.active {
+    max-height: 300px;
+}
+
+.add-event-header {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: #240124;
+    border-bottom: 1px solid #410052;
+    background: linear-gradient(45deg, #efe2ef, #f9c3f9);
+}
+
+.add-event-header .close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.add-event-header .close:hover {
+    color: #c004f5;
+}
+
+.add-event-header .title {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.add-event-body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 20px;
+}
+
+.add-event-body .add-event-input {
+    width: 100%;
+    height: 90px;
+    display: block;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.in {
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
+
+.add-event-body .add-event-input input {
+    width: 100%;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #c004f5;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #440244;
+    background-color: transparent;
+    transition: border-color 0.3s ease;
+}
+
+.add-event-body .add-event-input input::placeholder {
+    color: #e5aff5;
+}
+
+.add-event-body .add-event-input input:focus {
+    border-color: #c004f5;
+}
+
+.add-event-body .add-event-input input:focus::placeholder {
+    color: #c004f5;
+}
+
+.add-event-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.add-event-btn,
+.tasks-list-btn {
+    height: 35px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    outline: none;
+    border: none;
+    color: #fff;
+    background-color: #c004f5;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #c004f5;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+}
+
+.add-event-btn:hover,
+.tasks-list-btn:hover {
+    color: #b53ad7;
+    background-color: transparent;
+}
+
+.add-event- {
+    position: absolute;
+    bottom: 70px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #e5aff5;
+    border: 2px solid #e5aff5;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    opacity: 0.5;
+    transition: all 0.5s ease;
+}
+
+.add-event-:hover {
+    opacity: 1;
+    background: #410052;
+    transform: rotate(90deg);
+}
+
+.add-event- i {
+    pointer-events: none;
+}
+
+.add-event-.hide {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.alert {
+    color: #f50458;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: none;
+    margin-bottom: 5px;
+}
+
+.alert.active {
+    display: block;
+}
+
+.event-name.added {
+    display: none;
+}
+
+.added-from-the-list {
+    display: none;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #7f047f;
+    width: 100%;
+    border-bottom: 1px solid #cd05db;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+
+.added-from-the-list.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

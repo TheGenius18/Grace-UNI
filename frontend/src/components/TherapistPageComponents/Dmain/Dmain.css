@@ -1,0 +1,39 @@
+.d-main{
+    flex: 1;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: capitalize;
+    background:linear-gradient(80deg,rgba(34, 51, 61, 0.9),rgba(34, 51, 61, 0.7),rgba(34, 51, 61, 0.9)) ;
+}
+
+.d-main-notifications{
+    width: 80%;
+    height: 80%;
+}
+.d-main-profile{
+    width: 80%;
+    height: 80%;
+}
+
+.d-main-notification-header{
+    font-size: 40px;
+    font-weight: 600;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 30px;
+    color: azure;
+    text-shadow: 0 0 3px #000;
+}
+
+
+.d-main-memo-header{
+    font-size: 40px;
+    font-weight: 600;
+    margin: auto;
+    text-align: center;
+    margin: 30px;
+    color: azure;
+    text-shadow: 0 0 3px #000;
+}

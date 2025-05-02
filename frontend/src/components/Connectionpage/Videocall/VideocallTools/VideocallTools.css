@@ -1,0 +1,49 @@
+  .video-controls {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+    background:linear-gradient(80deg,rgba(34, 51, 61, 1),rgba(34, 51, 61, 1),rgba(34, 51, 61, 1)) ;
+    border-radius: 40px;
+  }
+  
+  .control-btn {
+    background: var(--light-teal);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.2),
+                -5px -5px 10px rgba(255,255,255,0.05);
+    transition: all 0.2s;
+    color: var(--deep-teal);
+    border: 1px solid var(--accent-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .control-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.3),
+                -3px -3px 6px rgba(255,255,255,0.1);
+    background: var(--accent-gold);
+  }
+  
+  .control-btn.active {
+    background: var(--accent-gold);
+    color: #d90000;
+  }
+  
+  .control-btn.end-call {
+    background: #940606;
+    color: white;
+    border-color: #ff6b6b;
+
+  }
+  
+  .control-btn.end-call:hover {
+    background: #ff0000;
+  }

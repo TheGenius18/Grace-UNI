@@ -1,0 +1,25 @@
+.diagnostic-app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("src/assets/images/9.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    /* padding: 20px; */
+  }
+  
+  .diagnostic-app {
+    width: 100%;
+    max-width: 800px;
+    background: transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  /* .diagnostic-app.results-view {
+    filter: blur(5px);
+    pointer-events: none;
+  } */
