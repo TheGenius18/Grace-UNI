@@ -1,5 +1,8 @@
-from django.db import models
+from django.db import models # type: ignore
 from django.contrib.auth.models import AbstractUser
+
+from rest_framework import serializers
+
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
@@ -17,7 +20,7 @@ class CustomUser(AbstractUser):
     default='patient'  
 )
     phone = models.CharField(max_length=20, blank=True, null=True)
-    
+    is_profile_complete = models.BooleanField(default=False)
     visotype = models.CharField(max_length=50, blank=True, null=True, 
                               help_text="Account verification status or type")
 
@@ -30,28 +33,37 @@ class Region(models.Model):
     
     def __str__(self):
         return f"{self.name}, {self.country}"
+    
 
+    
 class Therapist(models.Model):
     GENDER_CHOICES = (
         ('male', 'Male'),
         ('female', 'Female'),
     )
-    
+
     MARITAL_STATUS_CHOICES = (
         ('single', 'Single'),
         ('married', 'Married'),
         ('divorced', 'Divorced'),
         ('widowed', 'Widowed'),
     )
-    
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    
+    
     rank = models.IntegerField(default=0, help_text="Therapist ranking from 0 to 10")
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
+    education = models.CharField(max_length=255, blank=True)
     age = models.PositiveIntegerField()
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     marital_status = models.CharField(max_length=10, choices=MARITAL_STATUS_CHOICES, blank=True, null=True)
     motto = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+
+    experience = models.PositiveIntegerField(default=0)
+    specialization = models.CharField(max_length=255, blank=True)
+    availability = models.CharField(max_length=255, blank=True)
     
     def __str__(self):
         return f"Therapist: {self.user.email}"
@@ -148,7 +160,7 @@ class TherapistFreeTime(models.Model):
     )
     
     therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name='free_times')
-    day = models.DateTimeField(choices=DAY_CHOICES)
+    day = models.CharField(max_length=10, choices=DAY_CHOICES)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     is_available = models.BooleanField(default=True)
@@ -230,13 +242,15 @@ class TherapistMemo(models.Model):
 
 class TherapistNotification(models.Model):
     therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name='notifications')
+    request = models.ForeignKey('TherapistRequest', on_delete=models.CASCADE, null=True, blank=True)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     related_url = models.URLField(blank=True, null=True)
-    
+
     def __str__(self):
         return f"Notification for {self.therapist.user.email}"
+
     
 
 # class Appointment(models.Model):
@@ -297,3 +311,12 @@ class TrainingAssignment(models.Model):
 
     def __str__(self):
         return f"{self.training.title} → {self.patient.user.username}"
+
+class TherapistRequest(models.Model):
+    patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="sent_requests")
+    therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name="received_requests")
+    created_at = models.DateTimeField(auto_now_add=True)
+    message = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"Request from {self.patient.username} to {self.therapist.user.username}"

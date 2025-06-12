@@ -14,18 +14,18 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-
 class RegisterTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ('id', 'username', 'email', 'password', 'user_type')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(
-            validated_data['username'],
-            validated_data['email'],
-            validated_data['password']
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password'],
+            user_type=validated_data['user_type']  
         )
         return user
 

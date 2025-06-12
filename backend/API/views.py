@@ -11,8 +11,10 @@ from rest_framework.views import APIView
 from API.serializers import FullProfileSerializer, AppointmentSerializer
 from rest_framework.exceptions import PermissionDenied
 import requests
-
-
+from rest_framework.decorators import api_view, permission_classes
+from django.core.exceptions import ObjectDoesNotExist
+import json
+from .models import Patient, Therapist, Region
 class UserRegisterationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserRegistrationSerializer
@@ -259,7 +261,7 @@ class ChatbotMessageAPIView(APIView):
             }
 
             try:
-                response = requests.post(rasa_url, json=payload, timeout=5)
+                response = requests.post(rasa_url, json=payload, timeout=15)
                 if response.status_code == 200:
                     return Response(response.json(), status=200)
                 else:
@@ -294,7 +296,8 @@ class TherapistFreeTimeListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        # Automatically associate the free time with the therapist making the request
+        
+    
         therapist = Therapist.objects.get(user=self.request.user)
         serializer.save(therapist=therapist)
 
@@ -304,7 +307,7 @@ class TherapistFreeTimeDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Ensure therapists can only access their own free times
+       
         if self.request.user.is_therapist:
             return self.queryset.filter(therapist__user=self.request.user)
         return self.queryset
@@ -328,3 +331,147 @@ class TherapistFreeTimeAvailabilityView(generics.UpdateAPIView):
         instance.save()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+    
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def complete_profile(request):
+    user = request.user
+    data = request.data
+
+    try:
+        if user.user_type == 'patient':
+            patient, _ = Patient.objects.get_or_create(user=user)
+            patient.age = data.get('age')
+            patient.gender = data.get('gender')
+            patient.marital_status = data.get('marital_status')
+            patient.sibling_order = data.get('sibling_order')
+            patient.save()
+
+        elif user.user_type == 'therapist':
+            therapist, _ = Therapist.objects.get_or_create(user=user)
+            therapist.age = data.get('age')
+            therapist.gender = data.get('gender')
+            therapist.marital_status = data.get('marital_status')
+            
+            region_name = data.get('region')
+            if region_name:
+                region, _ = Region.objects.get_or_create(name=region_name, defaults={'country': 'Saudi Arabia'})
+                therapist.region = region
+
+            therapist.save()
+
+            
+
+        user.is_profile_complete = True
+        user.save()
+
+        return Response({"message": "Profile completed successfully!"})
+
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+    
+
+
+class TherapistListView(APIView):
+    permission_classes = [AllowAny]  
+
+    def get(self, request):
+        therapists = Therapist.objects.all()
+        serializer = TherapistSerializer(therapists, many=True)
+        return Response(serializer.data)
+    
+
+
+
+class RequestTherapistView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        therapist_id = request.data.get('therapist_id')
+        message = request.data.get('message', '')
+
+        try:
+            therapist = Therapist.objects.get(user__id=therapist_id)
+        except Therapist.DoesNotExist:
+            return Response({"error": "Therapist not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = TherapistRequestSerializer(data={
+            'therapist': therapist_id,
+            'message': message
+        })
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
+        request_obj = serializer.save(patient=request.user)
+
+      
+        user_name = request.user.get_full_name() or request.user.username or request.user.email
+
+      
+        existing = TherapistNotification.objects.filter(
+            therapist=therapist,
+            message__icontains=user_name
+        ).exists()
+
+        if existing:
+            return Response({"message": "Request already sent."}, status=status.HTTP_200_OK)
+
+       
+        TherapistNotification.objects.create(
+            therapist=therapist,
+            request=request_obj,
+            message=f"{user_name} has requested an appointment.",
+            related_url="/therapist/appointments"
+        )
+
+        return Response({"message": "Request sent successfully"}, status=status.HTTP_201_CREATED)
+
+
+
+
+
+class TherapistNotificationList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            therapist = Therapist.objects.get(user=request.user)
+        except Therapist.DoesNotExist:
+            return Response({"error": "You are not a therapist."}, status=status.HTTP_403_FORBIDDEN)
+
+        notifications = TherapistNotification.objects.filter(
+            therapist=therapist, request__isnull=False
+        ).order_by('-created_at')
+
+        serializer = TherapistNotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def accept_notification(request, notification_id):
+    try:
+        notification = TherapistNotification.objects.get(id=notification_id, therapist__user=request.user)
+        notification.is_read = True
+        notification.save()
+        return Response({"message": "Request accepted."})
+    except TherapistNotification.DoesNotExist:
+        return Response({"error": "Notification not found"}, status=404)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_patient_profile(request, patient_id):
+    try:
+        patient = CustomUser.objects.get(id=patient_id)
+        data = {
+            "username": patient.username,
+            "email": patient.email,
+            
+        }
+        return Response(data)
+    except CustomUser.DoesNotExist:
+        return Response({"error": "Patient not found"}, status=404)

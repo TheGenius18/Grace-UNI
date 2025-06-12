@@ -1,4 +1,6 @@
 from django.urls import path, include
+import requests
+
 from .views import *
 from django.contrib import admin
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
@@ -10,7 +12,7 @@ urlpatterns = [
     path("logout/", UserLogoutAPIView.as_view(), name="logout-user"),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('user/', UserInfoAPIView.as_view(), name="user-info"),
-    path('profile/', UserProfileView.as_view(), name='user-profile'),
+    path('profile/view/', UserProfileView.as_view(), name='user-profile'),
     path('appointments/create/', AppointmentCreateView.as_view(), name='appointment-create'),
     path('appointments/manage/', AppointmentManageView.as_view(), name='appointment-manage'),
     path('articles/create/', ArticleCreateView.as_view(), name='article-create'),
@@ -27,6 +29,12 @@ urlpatterns = [
     path('therapists/<int:therapist_id>/free-times/', TherapistFreeTimeByTherapistView.as_view(), name='therapist-free-times'),
     path('free-times/<int:pk>/', TherapistFreeTimeDetailView.as_view(), name='free-time-detail'),    
     path('free-times/', TherapistFreeTimeListCreateView.as_view(), name='free-time-list-create'),
+    path('profile/', complete_profile, name='complete_profile'),
+    path('therapists/', TherapistListView.as_view(), name='therapist-list'),
+    path("request-therapist/", RequestTherapistView.as_view(), name="request-therapist"),
+    path("notifications/", TherapistNotificationList.as_view(), name="therapist-notifications"),
+    path("notifications/<int:notification_id>/accept/", accept_notification),
+    path("patients/<int:patient_id>/", get_patient_profile),
+   
 
- 
 ]

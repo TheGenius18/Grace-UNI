@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import CustomUser, Patient, Therapist ,Appointment,Article, Comment,Training,TrainingAssignment,TherapistFreeTime
+from .models import CustomUser, Patient, Therapist ,Appointment,Article, Comment, TherapistNotification, TherapistRequest,Training,TrainingAssignment,TherapistFreeTime
 
 
 
@@ -9,7 +9,7 @@ from .models import CustomUser, Patient, Therapist ,Appointment,Article, Comment
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ("id", "username", "email", "user_type")
+        fields = ("id", "username", "email", "user_type","is_profile_complete")
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -89,21 +89,22 @@ class PatientSerializer(serializers.ModelSerializer):
 
 
 class TherapistSerializer(serializers.ModelSerializer):
+    therapist_id = serializers.IntegerField(source='user.id', read_only=True)
     user = CustomUserSerializer(read_only=True)
     patients = serializers.SerializerMethodField()
 
     class Meta:
         model = Therapist
         fields = [
-            'id', 'user', 'age', 'gender',
-            'education', 'experience',
-            'specialization', 'availability',
-            'patients'
+            'therapist_id', 'user', 'age', 'gender',
+            'marital_status', 'education',
+            'experience', 'specialization',
+            'availability', 'motto', 'rank',
+            'region', 'patients'
         ]
 
     def get_patients(self, obj):
         return [p.user.get_full_name() for p in obj.patients.all()]
-
 
 
 
@@ -189,7 +190,7 @@ class TherapistFreeTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TherapistFreeTime
         fields = ['id', 'therapist', 'day', 'start_time', 'end_time', 'is_available']
-        read_only_fields = ['therapist']  # Therapist is set automatically in the view
+        read_only_fields = ['therapist']  
 
     def validate(self, data):
         """
@@ -198,3 +199,32 @@ class TherapistFreeTimeSerializer(serializers.ModelSerializer):
         if data['start_time'] >= data['end_time']:
             raise serializers.ValidationError("End time must be after start time")
         return data
+
+
+
+class TherapistRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TherapistRequest
+        fields = ['id', 'therapist', 'patient', 'created_at']
+        read_only_fields = ['patient', 'created_at']
+
+
+class TherapistNotificationSerializer(serializers.ModelSerializer):
+    patient_name = serializers.SerializerMethodField()
+    patient_id = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TherapistNotification
+        fields = ['id', 'message', 'is_read', 'created_at', 'related_url', 'patient_name', 'patient_id']
+
+    def get_patient_name(self, obj):
+        if obj.request and obj.request.patient:
+            return obj.request.patient.get_full_name() or obj.request.patient.username
+        return "Unknown"
+
+    def get_patient_id(self, obj):
+        if obj.request and obj.request.patient:
+            return obj.request.patient.id
+        return None
+
+
