@@ -16,6 +16,7 @@ import Patient from "./components/PatientPageComponents/PatientPage";
 
 
 import Diary from "./pages/diary";
+import DepressionInfo from "./components/PatientPageComponents/DepressionInfo/DepressionInfo";
 function App() {
   return (
     <BrowserRouter>
@@ -31,7 +32,7 @@ function App() {
         <Route path="findmytherapist" element={<FindMyTherapist />} />
         <Route path="patient" element={<Patient />} />
         <Route path="diary" element={<Diary />} />
-
+        <Route path="psychoeducate" element={<DepressionInfo/>}/>
       </Routes>
     </BrowserRouter>
   );

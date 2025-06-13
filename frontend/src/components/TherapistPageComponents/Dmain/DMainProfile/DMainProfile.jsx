@@ -1,9 +1,7 @@
-<<<<<<< HEAD
+
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios"
-=======
-import React, { useState, useContext } from "react";
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
+
 import './DMainProfile.css';
 import Dicon from "/src/assets/images/therapist_icon1.png";
 import { Context } from "../../../../context/context";
@@ -15,7 +13,6 @@ export default function DMainProfile() {
     const [image, setImage] = useState(Dicon);
     const [showUpload, setShowUpload] = useState(false);
 
-<<<<<<< HEAD
     const [username, setUsername] = useState("");
     const [isLoggedIn, setLoggedIn] = useState(false);
  
@@ -47,8 +44,6 @@ export default function DMainProfile() {
      checkLoggedInUser();
    }, []); 
 
-=======
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -90,11 +85,7 @@ export default function DMainProfile() {
                     </div>
                     
                     <div className="profile-info">
-<<<<<<< HEAD
                         <h2 className="profile-name">{username}</h2>
-=======
-                        <h2 className="profile-name">mohammed zr</h2>
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
                         <div className="profile-stats">
                             <div className="stat-item">
                                 <span className="stat-value">7</span>

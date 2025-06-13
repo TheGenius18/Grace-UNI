@@ -15,12 +15,7 @@ import Noteifications from "./DMainNotification/DMainNotification"
 import Pateints from "./DMainPatiens/DMainPatiens"
 import Profile from "./DMainProfile/DMainProfile"
 import Patient from "./DMainPatiens/DMainPatientView/DMainPatientView"
-<<<<<<< HEAD
 import FreeTimeSlot from "./DMainProfile/DMainAppointment/DMainFreeSlots/DMainFreeSlots"
-
-=======
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
-
 
 import { Context } from "../../../context/context";
 
@@ -91,15 +86,12 @@ export default function Dmain() {
                 <h2 className="d-main-notification-header">settings</h2>
             </div>
         :null}
-<<<<<<< HEAD
         {DMainChanger=="freetimes"?
             <div className="d-main-settings">
                 <h2 className="d-main-notification-header">my free times</h2>
                 <FreeTimeSlot/>
             </div>
         :null}
-=======
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
 
         {DMainChanger=="grace"?
             <div className="d-main-hi-grace">

@@ -17,11 +17,7 @@ export default function Home() {
   useEffect(() => {
     const checkLoggedInUser = async () => {
       try {
-<<<<<<< HEAD
         const token = localStorage.getItem("accessToken");
-=======
-        const token = localStorage.getItem("access_token");
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
         if (token) {
           const config = {
             headers: {

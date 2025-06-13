@@ -13,9 +13,12 @@ const PatientSideButtons = () => {
         <span className="patient-page-btn-text">AI Assistant</span>
         <span className="patient-page-btn-icon">⚡</span>
       </button>
+
       <button className="patient-page-side-btn patient-page-info-btn">
-        <span className="patient-page-btn-text">Information</span>
-        <span className="patient-page-btn-icon">i</span>
+        <Link to="/psychoeducate" className="patient-page-side-btn patient-page-test-btn">
+          <span className="patient-page-btn-text">Information</span>
+          <span className="patient-page-btn-icon">i</span>
+        </Link>
       </button>
     </div>
   );

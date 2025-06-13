@@ -62,11 +62,8 @@
   position: relative;
   color: #ffffff;
   margin-bottom: 30px;
-<<<<<<< HEAD
   text-shadow: 0 0 8px rgb(0, 225, 255);
-=======
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
+
 }
 
 .register-page-main .register-page-title::before {
@@ -177,7 +174,6 @@ form .register-page-button input:hover {
   .register-page-main .register-page-content .register-page-category {
     flex-direction: column;
   }
-<<<<<<< HEAD
 }
 
 .register-step {
@@ -291,6 +287,5 @@ form .register-page-button input:hover {
     width: 100%;
     max-width: 280px;
   }
-=======
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
+
 }

@@ -26,17 +26,11 @@ const PatientNavbar = () => {
 
   const menuItems = [
     { id: 'main', label: 'Main' },
-<<<<<<< HEAD
     { id: 'treatment', label: 'Treatment' },
     { id: 'training', label: 'Tools' },
     { id: 'profile', label: 'Profile' },
     
    
-=======
-    { id: 'profile', label: 'Profile' },
-    { id: 'training', label: 'Tools' },
-    { id: 'treatment', label: 'Treatment' }
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
   ];
 
   return (

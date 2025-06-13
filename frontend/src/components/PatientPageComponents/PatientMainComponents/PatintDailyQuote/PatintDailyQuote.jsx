@@ -63,11 +63,8 @@ const DailyQuote = () => {
         
         <div className={`quote-content ${animationPhase >= 2 ? 'visible' : ''}`}>
           <h3 className="quote-title">
-<<<<<<< HEAD
             <span className="patient-title-underline">Daily Inspiration</span>
-=======
-            <span className="title-underline">Daily Inspiration</span>
->>>>>>> 5cdcdfa78f67d012eb71674650a7704f3fef30e5
+
           </h3>
           <p className="quote-text" ref={quoteRef}>
             {typedQuote}

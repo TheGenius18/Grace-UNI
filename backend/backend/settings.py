@@ -89,8 +89,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'grace_db',
-        'USER': 'django_user',
-        'PASSWORD': 'Tarekpvp67899',
+        'USER': 'root',
+        'PASSWORD': 'ZR&&pasword',
         'HOST': '127.0.0.1',
         'PORT': '3307',
         'OPTIONS': {
