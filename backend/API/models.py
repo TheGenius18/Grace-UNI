@@ -255,14 +255,12 @@ class TherapistNotification(models.Model):
     request = models.ForeignKey('TherapistRequest', on_delete=models.SET_NULL, null=True, blank=True)
     appointment = models.ForeignKey('Appointment', on_delete=models.SET_NULL, null=True, blank=True)
     
-    # Core notification fields
     notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPE_CHOICES)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     related_url = models.URLField(blank=True, null=True)
     
-    # Emergency-specific fields
     emergency_title = models.CharField(max_length=255, blank=True, null=True)
     emergency_description = models.TextField(blank=True, null=True)
     emergency_acknowledged = models.BooleanField(default=False)
@@ -292,7 +290,6 @@ class TherapistNotification(models.Model):
         return f"{prefix}{self.message[:50]}..."
 
     def save(self, *args, **kwargs):
-        # Automatically set notification type based on related fields
         if not self.notification_type:
             if self.request:
                 self.notification_type = 'request'
@@ -303,7 +300,6 @@ class TherapistNotification(models.Model):
             else:
                 self.notification_type = 'general'
         
-        # Auto-generate message if not provided for emergencies
         if self.notification_type == 'emergency' and not self.message and self.patient:
             self.message = (
                 f"Your patient {self.patient.user.get_full_name() or self.patient.user.username} "
