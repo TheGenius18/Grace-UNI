@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Context } from "../../../../../context/context";
 import "./PatientTrainingTools.css"
 
 const TrainingCards = () => {
+  const { setIsItTraining } = useContext(Context);
+  
   const trainings = [
     {
       title: 'Diary',
@@ -45,12 +48,20 @@ const TrainingCards = () => {
     }
   ];
 
+  const handleCardClick = (trainingTitle) => {
+    setIsItTraining(trainingTitle);
+  };
+
   return (
     <div className="training-tools-cards-container">
       {trainings.map((training, index) => (
-        <div key={index} className="training-tools-card">
+        <div 
+          key={index} 
+          className="training-tools-card"
+          onClick={() => handleCardClick(training.title)}
+        >
           <div className="card-logo">
-          <img src="src/assets/images/3.png" alt="GRACE" />
+            <img src="src/assets/images/3.png" alt="GRACE" />
           </div>
           <h3 className="training-tools-title">{training.title}</h3>
           <p className="training-tools-description">{training.description}</p>

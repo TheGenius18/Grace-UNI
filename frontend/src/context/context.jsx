@@ -8,6 +8,7 @@ export const Context = createContext();
 const ContextProvider=(props)=>{
 
   const [ItsHisFirstTime, setItsHisFirstTime ] = useState(false);
+  const [IsItTraining, setIsItTraining ] = useState("main");
 
   const [TypeOfDiag, setTypeOfDiag] = useState('front');
 
@@ -185,7 +186,10 @@ const ContextProvider=(props)=>{
         setFillUserInfo,
 
         ItsHisFirstTime,
-        setItsHisFirstTime
+        setItsHisFirstTime,
+
+        IsItTraining,
+        setIsItTraining
 
     
     }

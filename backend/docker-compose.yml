@@ -2,14 +2,15 @@ version: "3.8"
 
 services:
   db:
-    image: mysql:8
+  # it was mysql:8.0
+    image: bitnami/mysql:8.0
     container_name: grace-mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword123
+      MYSQL_ROOT_PASSWORD: ZR&&pasword
       MYSQL_DATABASE: grace_db
-      MYSQL_USER: django_user
-      MYSQL_PASSWORD: Tarekpvp67899
+      MYSQL_USER: grace_user
+      MYSQL_PASSWORD: ZR&&pasword
     ports:
       - "3307:3306"
     volumes:

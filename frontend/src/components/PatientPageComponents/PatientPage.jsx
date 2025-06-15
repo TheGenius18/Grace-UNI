@@ -4,6 +4,7 @@ import Main from './PatientMainComponents/PatientMain';
 import TrainingMenu from './PatientTrainingAndSkills/PatientTrainingMenu/PatientTrainingMenu';
 import TrainingMain from './PatientTrainingAndSkills/PatientTrainingMain/PatientTrainingMain';
 import Treatment from './PatientMainTreatment/patientMainTreatment';
+import TrainingChanger from './PatientTrainingAndSkills/PatientTrainingMain/PatientTrainingTools/PatientTrainingChanger/PatientTrainingChanger';
 
 
 
@@ -12,6 +13,7 @@ import { Context } from "../../context/context";
 
 const PatientDashboard = () => {
     const {PMainChanger,setPMainChanger} = useContext(Context)
+    const {IsItTraining,setIsItTraining} = useContext(Context)
 
 
   return (
@@ -24,8 +26,12 @@ const PatientDashboard = () => {
         :null}
         {PMainChanger=="training"?
             <div className="patient-training">
-                <TrainingMenu/>
-                <TrainingMain/>
+                {IsItTraining==="main"?
+                <div>
+                    <TrainingMenu/>
+                    <TrainingMain/>
+                </div>
+                :<TrainingChanger/>}
             </div>
         :null}
         {PMainChanger=="treatment"?

@@ -1,0 +1,386 @@
+/* Base Styles */
+.pmr-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ced4da;
+}
+
+.pmr-title {
+  color: #0077b6;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 2rem;
+  position: relative;
+}
+
+.pmr-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: #00b4d8;
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+.pmr-description {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+/* Instructions Section */
+.pmr-instructions {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid #00b4d8;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pmr-instructions:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 180, 216, 0.1);
+}
+
+.pmr-instructions h3 {
+  color: #0077b6;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.pmr-instructions ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pmr-instructions li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.pmr-instructions li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background-color: #00b4d8;
+  border-radius: 50%;
+}
+
+/* Buttons */
+.pmr-button {
+  background-color: #00b4d8;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(0, 180, 216, 0.2);
+}
+
+.pmr-button:hover {
+  background-color: #0077b6;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 180, 216, 0.3);
+}
+
+.pmr-button:active {
+  transform: translateY(0);
+}
+
+.pmr-stop-button {
+  background-color: white;
+  color: #0077b6;
+  border: 2px solid #0077b6;
+}
+
+.pmr-stop-button:hover {
+  background-color: #0077b6;
+  color: white;
+}
+
+/* Progress Bar */
+.pmr-progress-container {
+  margin-bottom: 2rem;
+}
+
+.pmr-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.pmr-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #90e0ef, #00b4d8);
+  border-radius: 4px;
+  transition: width 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  position: relative;
+}
+
+.pmr-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  animation: pmr-shimmer 2s infinite;
+}
+
+.pmr-progress-text {
+  display: block;
+  text-align: right;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Current Step Section */
+.pmr-current-step {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.pmr-current-step.pmr-pulse {
+  animation: pmr-pulse 1s infinite;
+}
+
+.pmr-muscle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.pmr-current-step h3 {
+  color: #0077b6;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Status Indicators */
+.pmr-status {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pmr-status.tense {
+  background-color: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+}
+
+.pmr-status.relax {
+  background-color: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
+}
+
+.pmr-instruction {
+  font-size: 1.1rem;
+  margin: 1.5rem 0;
+  line-height: 1.6;
+  color: #6c757d;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Timer Section */
+.pmr-timer-container {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.pmr-time-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 auto 0.5rem;
+  transition: all 0.5s ease;
+  position: relative;
+}
+
+.pmr-time-circle.tense {
+  background-color: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+  border: 3px solid #ff6b6b;
+}
+
+.pmr-time-circle.relax {
+  background-color: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+  border: 3px solid #2ecc71;
+}
+
+.pmr-timer-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Muscle Visualization */
+.pmr-visual {
+  margin: 2rem 0;
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pmr-muscle-visual {
+  padding: 1.5rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  display: inline-block;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  background-color: white;
+}
+
+.pmr-muscle-visual.active {
+  border-color: #00b4d8;
+  background-color: rgba(0, 180, 216, 0.05);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 180, 216, 0.1);
+}
+
+.pmr-muscle-icon {
+  width: 80px;
+  height: 80px;
+  background-color: #90e0ef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0077b6;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Summary Section */
+.pmr-summary {
+  text-align: center;
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  animation: pmr-fadeIn 0.5s ease;
+}
+
+.pmr-summary-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #2ecc71;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1rem;
+  animation: pmr-bounceIn 0.5s ease;
+}
+
+.pmr-summary h3 {
+  color: #0077b6;
+  margin-bottom: 1rem;
+}
+
+.pmr-summary p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #6c757d;
+}
+
+/* Animations */
+@keyframes pmr-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+}
+
+@keyframes pmr-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pmr-fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pmr-bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .pmr-container {
+    padding: 1.5rem;
+    border-radius: 0;
+  }
+  
+  .pmr-title {
+    font-size: 1.5rem;
+  }
+  
+  .pmr-muscle-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .pmr-time-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 1.5rem;
+  }
+}
