@@ -111,9 +111,7 @@ const PatientInfoForm = () => {
         console.error("Full error:", error);
         
         if (error.response) {
-          // Server responded with error status
           if (error.response.data) {
-            // Show the actual error message from backend
             setError(error.response.data.error || 
                     JSON.stringify(error.response.data));
           } else {
