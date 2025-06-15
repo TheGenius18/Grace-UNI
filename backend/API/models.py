@@ -240,18 +240,81 @@ class TherapistMemo(models.Model):
     def __str__(self):
         return self.subject
 
+
+
 class TherapistNotification(models.Model):
+    NOTIFICATION_TYPE_CHOICES = (
+        ('request', 'Therapist Request'),
+        ('appointment', 'Appointment'),
+        ('emergency', 'Emergency'),
+        ('general', 'General'),
+    )
+    
     therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name='notifications')
-    request = models.ForeignKey('TherapistRequest', on_delete=models.CASCADE, null=True, blank=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True, related_name='sent_notifications')
+    request = models.ForeignKey('TherapistRequest', on_delete=models.SET_NULL, null=True, blank=True)
+    appointment = models.ForeignKey('Appointment', on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # Core notification fields
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPE_CHOICES)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     related_url = models.URLField(blank=True, null=True)
+    
+    # Emergency-specific fields
+    emergency_title = models.CharField(max_length=255, blank=True, null=True)
+    emergency_description = models.TextField(blank=True, null=True)
+    emergency_acknowledged = models.BooleanField(default=False)
+    emergency_acknowledged_at = models.DateTimeField(blank=True, null=True)
+    emergency_severity = models.PositiveSmallIntegerField(
+        blank=True, 
+        null=True,
+        help_text="Severity level from 1 (low) to 10 (critical)"
+    )
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Therapist Notification'
+        verbose_name_plural = 'Therapist Notifications'
+        indexes = [
+            models.Index(fields=['therapist', 'is_read']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['notification_type']),
+        ]
 
     def __str__(self):
-        return f"Notification for {self.therapist.user.email}"
+        prefix = ""
+        if self.notification_type == 'emergency':
+            prefix = "🚨 EMERGENCY: "
+        elif self.notification_type == 'request':
+            prefix = "📨 REQUEST: "
+        return f"{prefix}{self.message[:50]}..."
 
-    
+    def save(self, *args, **kwargs):
+        # Automatically set notification type based on related fields
+        if not self.notification_type:
+            if self.request:
+                self.notification_type = 'request'
+            elif self.appointment:
+                self.notification_type = 'appointment'
+            elif self.emergency_title:
+                self.notification_type = 'emergency'
+            else:
+                self.notification_type = 'general'
+        
+        # Auto-generate message if not provided for emergencies
+        if self.notification_type == 'emergency' and not self.message and self.patient:
+            self.message = (
+                f"Your patient {self.patient.user.get_full_name() or self.patient.user.username} "
+                f"reported an emergency: {self.emergency_title}"
+            )
+        
+        super().save(*args, **kwargs)
+
+    @property
+    def is_emergency(self):
+        return self.notification_type == 'emergency'
 
 # class Appointment(models.Model):
 #     STATUS_CHOICES = (

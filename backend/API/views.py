@@ -475,3 +475,37 @@ def get_patient_profile(request, patient_id):
         return Response(data)
     except CustomUser.DoesNotExist:
         return Response({"error": "Patient not found"}, status=404)
+    
+    
+class EmergencyNotificationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            patient = Patient.objects.get(user=request.user)
+        except Patient.DoesNotExist:
+            return Response({"error": "You are not a patient."}, status=status.HTTP_403_FORBIDDEN)
+
+        if not patient.therapist:
+            return Response({"error": "You don't have an assigned therapist."}, status=status.HTTP_400_BAD_REQUEST)
+
+        emergency_title = request.data.get('emergency_title')
+        emergency_description = request.data.get('emergency_description')
+
+        if not emergency_title:
+            return Response({"error": "Emergency title is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create the notification
+        notification = TherapistNotification.objects.create(
+            therapist=patient.therapist,
+            message=f"Your patient {patient.get_full_name() or patient.user.username} had this emergency: {emergency_title}",
+            related_url=f"/patient/{patient.id}/",  # Adjust this URL as needed
+            emergency_title=emergency_title,
+            emergency_description=emergency_description,
+            patient=patient
+        )
+
+        # You might want to add additional logic here, like sending an email or push notification
+
+        serializer = TherapistNotificationSerializer(notification)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

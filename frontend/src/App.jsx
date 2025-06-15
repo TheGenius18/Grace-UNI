@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 // import Layout from "./pages/Layout";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import EmergencyPage from "./pages/EmergencyPage";
+import EmergencyPage from "./components/EmergencyPage/EmergencyPage";
 import Diagnosis from "./components/DiagnosisPgeComponents/DiagnosisFrontPage/DiagnosisFrontPage";
 import Therapist from "./pages/TherapistPage";
 import Connection from "./pages/ConnectionPage";

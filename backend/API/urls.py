@@ -35,6 +35,7 @@ urlpatterns = [
     path("notifications/", TherapistNotificationList.as_view(), name="therapist-notifications"),
     path("notifications/<int:notification_id>/accept/", accept_notification),
     path("patients/<int:patient_id>/", get_patient_profile),
+    path("notifications/emergency/", EmergencyNotificationView.as_view(), name="emergency-notification"),
    
 
 ]

@@ -212,19 +212,28 @@ class TherapistRequestSerializer(serializers.ModelSerializer):
 class TherapistNotificationSerializer(serializers.ModelSerializer):
     patient_name = serializers.SerializerMethodField()
     patient_id = serializers.SerializerMethodField()
-
+    is_emergency = serializers.SerializerMethodField()
+    
     class Meta:
         model = TherapistNotification
-        fields = ['id', 'message', 'is_read', 'created_at', 'related_url', 'patient_name', 'patient_id']
-
+        fields = [
+            'id', 'message', 'is_read', 'created_at', 'related_url',
+            'patient_name', 'patient_id', 'is_emergency',
+            'emergency_title', 'emergency_description',
+            'notification_type', 'emergency_severity'
+        ]
+    
     def get_patient_name(self, obj):
-        if obj.request and obj.request.patient:
-            return obj.request.patient.get_full_name() or obj.request.patient.username
-        return "Unknown"
-
-    def get_patient_id(self, obj):
-        if obj.request and obj.request.patient:
-            return obj.request.patient.id
+        if obj.patient:
+            return obj.patient.user.get_full_name() or obj.patient.user.username
         return None
+    
+    def get_patient_id(self, obj):
+        if obj.patient:
+            return obj.patient.user.id
+        return None
+    
+    def get_is_emergency(self, obj):
+        return obj.is_emergency
 
 

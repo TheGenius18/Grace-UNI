@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import './EmergencyPage.css';
-import Navbar from "../HomePageComponents/HomeNavbar/HomeNavbar"
+import Navbar from "../HomePageComponents/HomeNavbar/HomeNavbar";
 
 const EmergencyPage = () => {
   const [selectedEmergency, setSelectedEmergency] = useState(null);
   const [messageSent, setMessageSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [notification, setNotification] = useState({ message: '', type: '' }); // type can be 'error' or 'success'
   const detailsRef = useRef(null);
   
   const emergencies = [
@@ -113,22 +116,63 @@ const EmergencyPage = () => {
         description: "Feeling completely flooded by emotions and unable to cope.",
         advice: [
           "Use the TIPP technique: Temperature (cold water on face), Intense exercise, Paced breathing, Paired muscle relaxation",
-          "Create distance with " + 
-          "journaling or art",
+          "Create distance with journaling or art",
           "Practice self-compassion - acknowledge how hard this is",
           "Contact your therapist to process what triggered this"
         ]
       }
   ];
 
-  const handleNotifyTherapist = () => {
-    console.log(`Notifying therapist about emergency: ${selectedEmergency.title}`);
-    setMessageSent(true);
-    setTimeout(() => setMessageSent(false), 5000);
+  const handleNotifyTherapist = async () => {
+    if (!selectedEmergency) return;
+    
+    setIsLoading(true);
+    setNotification({ message: '', type: '' });
+    
+    try {
+      const token = localStorage.getItem('access_token');
+      
+      const response = await axios.post(
+        '/api/notifications/emergency/',
+        {
+          emergency_title: selectedEmergency.title,
+          emergency_description: selectedEmergency.description,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        setMessageSent(true);
+        setNotification({
+          message: 'Your therapist has been notified and will reach out to you soon.',
+          type: 'success'
+        });
+        setTimeout(() => {
+          setMessageSent(false);
+          setNotification({ message: '', type: '' });
+        }, 5000);
+      }
+    } catch (err) {
+      console.error('Error notifying therapist:', err);
+      setNotification({
+        message: err.response?.data?.error || 
+                err.message || 
+                'Failed to notify therapist. Please try again.',
+        type: 'error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCardClick = (emergency) => {
     setSelectedEmergency(emergency);
+    setNotification({ message: '', type: '' });
   };
 
   useEffect(() => {
@@ -142,65 +186,70 @@ const EmergencyPage = () => {
 
   return (
     <div className="emergency-component">
-    <Navbar/>
-    <div className="emergency-component-container">
-      <h1 className="emergency-component-title">Mental Health Emergency Resources</h1>
-      <p className="emergency-component-text">Select an emergency situation to view guidance and support options</p>
-      
-      <div>
-        <h2 className="emergency-component-section-title">Common Emergencies</h2>
-        <div className="emergency-component-list">
-          {emergencies.map(emergency => (
-            <div 
-              key={emergency.id}
-              className="emergency-component-card"
-              onClick={() => handleCardClick(emergency)}
-            >
-              <h3 className="emergency-component-card-title">{emergency.title}</h3>
-              <p className="emergency-component-card-description">{emergency.description}</p>
+      <Navbar/>
+      <div className="emergency-component-container">
+        <h1 className="emergency-component-title">Mental Health Emergency Resources</h1>
+        <p className="emergency-component-text">Select an emergency situation to view guidance and support options</p>
+        
+        <div>
+          <h2 className="emergency-component-section-title">Common Emergencies</h2>
+          <div className="emergency-component-list">
+            {emergencies.map(emergency => (
+              <div 
+                key={emergency.id}
+                className={`emergency-component-card ${selectedEmergency?.id === emergency.id ? 'selected' : ''}`}
+                onClick={() => handleCardClick(emergency)}
+              >
+                <h3 className="emergency-component-card-title">{emergency.title}</h3>
+                <p className="emergency-component-card-description">{emergency.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div ref={detailsRef}>
+          {selectedEmergency && (
+            <div className="emergency-component-detail">
+              <h3 className="emergency-component-emergency-title">{selectedEmergency.title}</h3>
+              <p className="emergency-component-text">{selectedEmergency.description}</p>
+              
+              <h4 className="emergency-component-subtitle">Recommended Actions:</h4>
+              <ul className="emergency-component-advice-list">
+                {selectedEmergency.advice.map((item, index) => (
+                  <li key={index} className="emergency-component-advice-item">{item}</li>
+                ))}
+              </ul>
+              
+              {/* Notification message above the button */}
+              {notification.message && (
+                <div className={`emergency-component-notification ${notification.type}`}>
+                  {notification.message}
+                </div>
+              )}
+              
+              <button 
+                className="emergency-component-notify-button"
+                onClick={handleNotifyTherapist}
+                disabled={messageSent || isLoading}
+              >
+                {isLoading ? 'Sending...' : 
+                 messageSent ? 'Therapist Notified' : 
+                 'Notify My Therapist'}
+              </button>
             </div>
-          ))}
+          )}
+        </div>
+        
+        <div className="emergency-component-crisis-support">
+          <h2 className="emergency-component-section-title">24/7 Crisis Support</h2>
+          <p className="emergency-component-text">If you're in immediate danger, please call emergency services or a crisis hotline:</p>
+          <ul className="emergency-component-crisis-list">
+            <li className="emergency-component-crisis-item">National Suicide Prevention Lifeline: 988 (US)</li>
+            <li className="emergency-component-crisis-item">Crisis Text Line: Text HOME to 741741 (US)</li>
+            <li className="emergency-component-crisis-item">Your local emergency number</li>
+          </ul>
         </div>
       </div>
-      
-      <div ref={detailsRef}>
-        {selectedEmergency && (
-          <div className="emergency-component-detail">
-            <h3 className="emergency-component-emergency-title">{selectedEmergency.title}</h3>
-            <p className="emergency-component-text">{selectedEmergency.description}</p>
-            
-            <h4 className="emergency-component-subtitle">Recommended Actions:</h4>
-            <ul className="emergency-component-advice-list">
-              {selectedEmergency.advice.map((item, index) => (
-                <li key={index} className="emergency-component-advice-item">{item}</li>
-              ))}
-            </ul>
-            
-            <button 
-              className="emergency-component-notify-button"
-              onClick={handleNotifyTherapist}
-              disabled={messageSent}
-            >
-              {messageSent ? "Therapist Notified" : "Notify My Therapist"}
-            </button>
-            
-            {messageSent && (
-              <p className="emergency-component-text">Your therapist has been notified about this emergency and will reach out to you.</p>
-            )}
-          </div>
-        )}
-      </div>
-      
-      <div className="emergency-component-crisis-support">
-        <h2 className="emergency-component-section-title">24/7 Crisis Support</h2>
-        <p className="emergency-component-text">If you're in immediate danger, please call emergency services or a crisis hotline:</p>
-        <ul className="emergency-component-crisis-list">
-          <li className="emergency-component-crisis-item">National Suicide Prevention Lifeline: 988 (US)</li>
-          <li className="emergency-component-crisis-item">Crisis Text Line: Text HOME to 741741 (US)</li>
-          <li className="emergency-component-crisis-item">Your local emergency number</li>
-        </ul>
-      </div>
-    </div>
     </div>
   );
 };
