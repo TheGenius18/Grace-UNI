@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import CustomUser, Patient, Therapist ,Appointment,Article, Comment, TherapistNotification, TherapistRequest,Training,TrainingAssignment,TherapistFreeTime
+from .models import CustomUser, Patient, Therapist ,Appointment,Article, Comment, TherapistNotification, TherapistRequest,Training,TrainingAssignment,TherapistFreeTime,TreatmentPlan, TreatmentGoal, TreatmentSessionTopic
 
 
 
@@ -121,6 +121,34 @@ class FullProfileSerializer(serializers.Serializer):
             return TherapistSerializer(therapist).data if therapist else None
         return None
 
+
+
+
+
+class TreatmentGoalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TreatmentGoal
+        fields = ['id', 'description', 'is_achieved', 'target_date']
+
+class TreatmentSessionTopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TreatmentSessionTopic
+        fields = ['id', 'title', 'description', 'session_number']
+
+class TreatmentPlanSerializer(serializers.ModelSerializer):
+    goals = TreatmentGoalSerializer(many=True, read_only=True)
+    session_topics = TreatmentSessionTopicSerializer(many=True, read_only=True)
+    completed_sessions = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = TreatmentPlan
+        fields = [
+            'id', 'title', 'type_of_therapy', 'number_of_sessions',
+            'created_at', 'goals', 'session_topics', 'completed_sessions'
+        ]
+    
+    def get_completed_sessions(self, obj):
+        return obj.patient.appointments.filter(status='completed').count()
 
 
 

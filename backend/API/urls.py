@@ -4,7 +4,7 @@ import requests
 from .views import *
 from django.contrib import admin
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
-from .views import SaveDiagnosisView,UserProfileView, AppointmentCreateView, AppointmentManageView, ArticleCreateView, ArticleListView, CommentCreateView, TrainingCreateView, TrainingAssignView, MyTrainingsView, MarkTrainingCompleteView, TherapistFreeTimeListCreateView,TherapistFreeTimeDetailView,TherapistFreeTimeByTherapistView,TherapistFreeTimeAvailabilityView
+from .views import SaveDiagnosisView,UserProfileView, AppointmentCreateView, AppointmentManageView, ArticleCreateView, ArticleListView, CommentCreateView, TrainingCreateView, TrainingAssignView, MyTrainingsView, MarkTrainingCompleteView, TherapistFreeTimeListCreateView,TherapistFreeTimeDetailView,TherapistFreeTimeByTherapistView,TherapistFreeTimeAvailabilityView,PatientTreatmentView
 
 urlpatterns = [
     path("register/", UserRegisterationAPIView.as_view(), name="register-user"),
@@ -36,6 +36,8 @@ urlpatterns = [
     path("notifications/<int:notification_id>/accept/", accept_notification),
     path("patients/<int:patient_id>/", get_patient_profile),
     path("notifications/emergency/", EmergencyNotificationView.as_view(), name="emergency-notification"),
+    path('patient/treatment/', PatientTreatmentView.as_view(), name='patient-treatment'),
+
    
 
 ]

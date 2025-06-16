@@ -1,3 +1,4 @@
+from datetime import timezone
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny,IsAuthenticated
@@ -8,13 +9,13 @@ from rest_framework import status
 from rest_framework import generics, permissions
 from .models import Appointment, Patient, Therapist,Article, Comment
 from rest_framework.views import APIView
-from API.serializers import FullProfileSerializer, AppointmentSerializer
+from API.serializers import FullProfileSerializer, TherapistSerializer,TreatmentPlanSerializer, AppointmentSerializer
 from rest_framework.exceptions import PermissionDenied
 import requests
 from rest_framework.decorators import api_view, permission_classes
 from django.core.exceptions import ObjectDoesNotExist
 import json
-from .models import Patient, Therapist, Region
+from .models import Patient, Therapist, Region, TreatmentPlan
 class UserRegisterationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserRegistrationSerializer
@@ -509,3 +510,59 @@ class EmergencyNotificationView(APIView):
 
         serializer = TherapistNotificationSerializer(notification)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+    
+    
+    
+    
+class PatientTreatmentView(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request, *args, **kwargs):
+        try:
+            patient = request.user.patient
+        except Patient.DoesNotExist:
+            return Response(
+                {"error": "User is not a patient"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Check if patient has a therapist
+        if not patient.therapist:
+            return Response({
+                "has_therapist": False,
+                "message": "Begin your treatment journey by selecting a therapist"
+            })
+        
+        # Get active treatment plan
+        treatment_plan = TreatmentPlan.objects.filter(
+            patient=patient,
+            is_active=True
+        ).first()
+        
+        if not treatment_plan:
+            return Response({
+                "has_therapist": True,
+                "has_plan": False,
+                "message": "Your therapist will create a treatment plan for you soon"
+            })
+        
+        # Get next upcoming session
+        next_session = Appointment.objects.filter(
+            patient=patient,
+            status='scheduled',
+            scheduled_time__gte=timezone.now()
+        ).order_by('scheduled_time').first()
+        
+        data = {
+            "has_therapist": True,
+            "has_plan": True,
+            "therapist": TherapistSerializer(patient.therapist).data,
+            "treatment_plan": TreatmentPlanSerializer(treatment_plan).data,
+            "next_session": AppointmentSerializer(next_session).data if next_session else None,
+            "completed_sessions": patient.appointments.filter(status='completed').count(),
+            "total_sessions": treatment_plan.number_of_sessions
+        }
+        
+        return Response(data)
