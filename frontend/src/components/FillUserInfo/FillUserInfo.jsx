@@ -1,432 +1,153 @@
-import React, { useState, useContext, useEffect } from 'react';
-import "./FillUserInfo.css"
-import axios from "axios";
-import {Context} from "../../context/context"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import PatientForm from '../FillUserInfo/PatientForm';
+import TherapistForm from '../FillUserInfo/TherapistForm';
 
-const PatientInfoForm = () => {
-
-  const [UserType, setUserType] = useState("");
-  const [isLoggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-      const checkLoggedInUser = async () => {
-      try {
-          const token = localStorage.getItem("accessToken");
-          if (token) {
-          const config = {
-              headers: {
-              Authorization: `Bearer ${token}`,
-              },
-          };
-          const response = await axios.get(
-              "http://127.0.0.1:8000/api/user/",
-              config
-          );
-          setUserType(response.data.user_type);
-          console.log(response.data.user_type);
-          } else {
-          setLoggedIn(false);
-          setUserType("");
-          }
-      } catch {
-          setLoggedIn(false);
-          setUserType("");
-      }
-      };
-      checkLoggedInUser();
-  }, []); 
-
-  
-  const [TerapistformData, setTherapistFormData] = useState({
-      age: 30,
-      gender: 'male',
-      region: '',
-      marital_status: 'single',
-      education: '',
-      experience: '',
-      specialization: '',
-      language: '',
-      cv: null
+const InformationPage = () => {
+  const [authState, setAuthState] = useState({
+    loading: true,
+    userType: null,
+    error: null
   });
+  const navigate = useNavigate();
 
-  const { setFillUserInfo } = useContext(Context);
-    
-  const [formData, setFormData] = useState({
-    age: 30,
-    gender: 'male',
-    sibling_order: 'youngest',
-    marital_status: 'single',
-  });
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [error, setError] = useState(null);
-
-  const handleChange = (e) => {
-    if(UserType == "patient"){window.location.href = '/patient';}
-    if(UserType == "therapist"){window.location.href = '/therapist';}
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  // Enhanced token retrieval with fallbacks
+  const getAuthToken = () => {
+    return (
+      localStorage.getItem('access_token')
+    );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if(UserType=="therapist"){formData==TerapistformData}
-    console.log(formData);
-    if (isLoading) return;
-    console.log(formData);
-    setIsLoading(true);
-    setError(null);
-    setSuccessMessage(null);
-    console.log(localStorage.getItem('accessToken'));
+  const fetchUserData = async () => {
+    const token = getAuthToken();
     
+    if (!token) {
+      setAuthState({
+        loading: false,
+        userType: null,
+        error: 'No authentication token found'
+      });
+      navigate('/login', { replace: true });
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('accessToken');
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/profile/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      
-      console.log("Success!", response.data);
-      setSuccessMessage("Profile updated successfully!");
-      setFillUserInfo(true);
-      
-      
-      setTimeout(() => {
-        window.location.href = '/'+UserType;
-        setFillUserInfo(true);
-        setFillUserInfo(false);
-      }, 1500);
-      
-    } catch (error) {
-        console.error("Full error:", error);
-        
-        if (error.response) {
-          if (error.response.data) {
-            setError(error.response.data.error || 
-                    JSON.stringify(error.response.data));
-          } else {
-            setError(`Server error: ${error.response.status}`);
-          }
-        } else {
-          setError("Network error - could not connect to server");
-        }
+      const response = await axios.get('http://127.0.0.1:8000/api/user/', {
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        timeout: 10000
+      });
+
+      if (!response.data?.user_type) {
+        throw new Error('User type not found in response');
       }
-    finally {
-      setIsLoading(false);
-    //   setFillUserInfo(true);
-    //   setFillUserInfo(false);
-    //   window.location.href = "/login";
+
+      setAuthState({
+        loading: false,
+        userType: response.data.user_type,
+        error: null
+      });
+
+    } catch (error) {
+      console.error('User data fetch error:', error);
+      
+      // Clear invalid token
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('accessToken');
+      sessionStorage.removeItem('access_token');
+
+      let errorMessage = 'Authentication failed';
+      
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Session expired. Please login again.';
+        } else if (error.response.data?.detail) {
+          errorMessage = error.response.data.detail;
+        }
+      } else if (error.request) {
+        errorMessage = 'Network error. Please check your connection.';
+      }
+
+      setAuthState({
+        loading: false,
+        userType: null,
+        error: errorMessage
+      });
+
+      navigate('/login', { 
+        state: { error: errorMessage },
+        replace: true 
+      });
     }
   };
 
+  useEffect(() => {
+    // Add slight delay to ensure token is available after login redirect
+    const timer = setTimeout(fetchUserData, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
-  const handleFileChange = (e) => {
-    setTherapistFormData(prev => ({
-        ...prev,
-        cv: e.target.files[0]
-    }));
-};
-
-  if (UserType === "therapist") {
+  // Loading state
+  if (authState.loading) {
     return (
-        <form className="fill-info-form" onSubmit={handleSubmit}>
-            <div className="fill-info-form-title">Fill your therapist information</div>
-            <div>
-                <p className="fill-info-form-desc">
-                    Please provide your professional information to complete your profile
-                </p>
-            </div>
-            
-            {successMessage && <div className="success-message">{successMessage}</div>}
-            {error && <div className="error-message">{error}</div>}
-            
-            <div className="fill-info-form-group">
-                <label htmlFor="age">Age</label>
-                <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    value={TerapistformData.age}
-                    onChange={handleChange}
-                    min="18"
-                    max="90"
-                    required
-                />
-            </div>
-
-            <div className="fill-info-form-group">
-                <label htmlFor="gender">Gender</label>
-                <select
-                    id="gender"
-                    name="gender"
-                    value={TerapistformData.gender}
-                    onChange={handleChange}
-                    required
-                >
-                    <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
-            </div>
-
-            <div className="fill-info-form-group">
-                <label htmlFor="region">Region</label>
-                <input
-                    type="text"
-                    id="region"
-                    name="region"
-                    value={TerapistformData.region}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div className="fill-info-form-group">
-                <label>Marital Status</label>
-                <div className="fill-info-radio-group">
-                    <label>
-                        <input
-                            type="radio"
-                            name="marital_status"
-                            value="single"
-                            checked={TerapistformData.marital_status === 'single'}
-                            onChange={handleChange}
-                            required
-                        />
-                        Single
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="marital_status"
-                            value="married"
-                            checked={TerapistformData.marital_status === 'married'}
-                            onChange={handleChange}
-                        />
-                        Married
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="marital_status"
-                            value="divorced"
-                            checked={TerapistformData.marital_status === 'divorced'}
-                            onChange={handleChange}
-                        />
-                        Divorced
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="marital_status"
-                            value="widowed"
-                            checked={TerapistformData.marital_status === 'widowed'}
-                            onChange={handleChange}
-                        />
-                        Widowed
-                    </label>
-                </div>
-            </div>
-
-            <div className="fill-info-form-group">
-                <label htmlFor="education">Education</label>
-                <input
-                    type="text"
-                    id="education"
-                    name="education"
-                    value={TerapistformData.education}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div className="fill-info-form-group">
-                <label htmlFor="experience">Years of Experience</label>
-                <input
-                    type="number"
-                    id="experience"
-                    name="experience"
-                    value={TerapistformData.experience}
-                    onChange={handleChange}
-                    min="0"
-                    required
-                />
-            </div>
-
-            <div className="fill-info-form-group">
-                <label htmlFor="specialization">Specialization</label>
-                <input
-                    type="text"
-                    id="specialization"
-                    name="specialization"
-                    value={TerapistformData.specialization}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-
-            <div className="fill-info-form-group">
-                <label htmlFor="language">Languages Spoken</label>
-                <input
-                    type="text"
-                    id="language"
-                    name="language"
-                    value={TerapistformData.language}
-                    onChange={handleChange}
-                    required
-                    placeholder="Separate languages with commas"
-                />
-            </div>
-
-            <div className="fill-info-form-group">
-                <label htmlFor="cv">Upload CV</label>
-                <input
-                    type="file"
-                    id="cv"
-                    name="cv"
-                    onChange={handleFileChange}
-                    accept=".pdf,.doc,.docx"
-                    required
-                />
-            </div>
-
-            <button 
-                type="submit" 
-                className="fill-info-submit-btn"
-                disabled={isLoading}
-            >
-                {isLoading ? 'Submitting...' : 'Submit'}
-            </button>
-        </form>
-    );
-}
-
-  return (
-    <form className="fill-info-form" onSubmit={handleSubmit}>
-      <div className="fill-info-form-title">Fill your information</div>
-      <div>
-        <p className="fill-info-form-desc">
-          One step before you continue, fill your information for better performance
-        </p>
-      </div>
-      
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {error && <div className="error-message">{error}</div>}
-      
-      <div className="fill-info-form-group">
-        <label htmlFor="age">Age</label>
-        <input
-          type="number"
-          id="age"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-          min="18"
-          max="90"
-          required
-        />
-      </div>
-
-      <div className="fill-info-form-group">
-        <label>Marital Status</label>
-        <div className="fill-info-radio-group">
-          <label>
-            <input
-              type="radio"
-              name="marital_status"
-              value="single"
-              checked={formData.marital_status === 'single'}
-              onChange={handleChange}
-              required
-            />
-            Single
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="marital_status"
-              value="married"
-              checked={formData.marital_status === 'married'}
-              onChange={handleChange}
-            />
-            Married
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="marital_status"
-              value="divorced"
-              checked={formData.marital_status === 'divorced'}
-              onChange={handleChange}
-            />
-            Divorced
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="marital_status"
-              value="widowed"
-              checked={formData.marital_status === 'widowed'}
-              onChange={handleChange}
-            />
-            Widowed
-          </label>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-r-transparent"></div>
+          <p className="mt-3 text-gray-600">Verifying your session...</p>
         </div>
       </div>
+    );
+  }
 
-      <div className="fill-info-form-group">
-        <label htmlFor="gender">Gender</label>
-        <select
-          id="gender"
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          required
+  // Error state (should be redirected but kept as fallback)
+  if (authState.error) {
+    return (
+      <div className="max-w-md mx-auto mt-10 p-6 bg-red-50 rounded-lg">
+        <h3 className="text-lg font-medium text-red-800">Authentication Error</h3>
+        <p className="mt-2 text-red-600">{authState.error}</p>
+        <button
+          onClick={() => navigate('/login')}
+          className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
-          <option value="">Select Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          {/* <option value="other">Other</option> */}
-          {/* <option value="prefer-not-to-say">Prefer not to say</option> */}
-        </select>
+          Go to Login
+        </button>
       </div>
+    );
+  }
 
-      <div className="fill-info-form-group">
-        <label htmlFor="sibling_order">Order Among Siblings</label>
-        <select
-          id="sibling_order"
-          name="sibling_order"
-          value={formData.sibling_order}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Position</option>
-          <option value="only">Only child</option>
-          <option value="oldest">Oldest</option>
-          <option value="middle">Middle</option>
-          <option value="youngest">Youngest</option>
-        </select>
-      </div>
-
-      <button 
-        type="submit" 
-        className="fill-info-submit-btn"
-        disabled={isLoading}
-      >
-        {isLoading ? 'Submitting...' : 'Submit'}
-      </button>
-    </form>
-  );
+  // Success states
+  switch (authState.userType) {
+    case 'patient':
+      return <PatientForm />;
+    case 'therapist':
+      return <TherapistForm />;
+    default:
+      return (
+        <div className="max-w-md mx-auto mt-10 p-6 bg-yellow-50 rounded-lg">
+          <h3 className="text-lg font-medium text-yellow-800">Account Issue</h3>
+          <p className="mt-2 text-yellow-600">
+            Your account type isn't properly configured.
+          </p>
+          <div className="mt-4 space-x-3">
+            <button
+              onClick={() => navigate('/login')}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Login Again
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 border border-gray-300 rounded"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+      );
+  }
 };
 
-export default PatientInfoForm;
+export default InformationPage;

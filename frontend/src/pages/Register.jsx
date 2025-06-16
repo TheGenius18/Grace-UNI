@@ -8,6 +8,7 @@ export default function Register() {
     email: "",
     password: "",
     passwordcheck: "",
+    user_type: "patient",
   });
   const handleChange = (e) => {
     setFormData({
@@ -105,7 +106,18 @@ export default function Register() {
                 />
               </div>
             </div>
-
+            <div className="register-page-input-box">
+              <span className="register-page-details">Account Type</span>
+              <select
+                name="user_type"
+                value={formData.user_type}
+                onChange={handleChange}
+                required
+              >
+                <option value="patient">Patient</option>
+                <option value="therapist">Therapist</option>
+              </select>
+            </div>
             <div className="register-page-button">
               <input type="submit" value="Register" />
             </div>

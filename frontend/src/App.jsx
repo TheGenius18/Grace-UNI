@@ -12,6 +12,8 @@ import Connection from "./pages/ConnectionPage";
 import ArticlesPage from "./pages/ArticlesPage";
 import FindMyTherapist from "./components/FindMyTherapist/FindMyTherapist";
 import Patient from "./components/PatientPageComponents/PatientPage";
+import FillUserInfo from "./components/FillUserInfo/FillUserInfo";
+import TherapistResultsPage from "./pages/TherapistResultsPage";
 
 
 
@@ -32,7 +34,10 @@ function App() {
         <Route path="findmytherapist" element={<FindMyTherapist />} />
         <Route path="patient" element={<Patient />} />
         <Route path="diary" element={<Diary />} />
+        <Route path="fillyourinfo" element={<FillUserInfo />} />
         <Route path="psychoeducate" element={<DepressionInfo/>}/>
+        <Route path="/therapist-results" element={<TherapistResultsPage />} />
+
       </Routes>
     </BrowserRouter>
   );
