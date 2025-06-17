@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../components/FindMyTherapist/FindMyTherapist.css";
@@ -51,52 +50,30 @@ const TherapistResultsPage = () => {
       });
   }, [formData, navigate]);
 
-  const handleRequest = async (therapistId) => {
-    if (requestingId !== null) return;
-
-    if (requestedTherapists.includes(therapistId)) {
-      alert("You’ve already requested this therapist.");
+  const handleRequest = (therapist) => {
+    if (requestedTherapists.includes(therapist.therapist_id)) {
+      alert("You've already requested this therapist.");
       return;
     }
 
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("access_token");
     if (!token) {
       alert("You must be logged in to request a therapist.");
       return;
     }
 
-    setRequestingId(therapistId);
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/request-therapist/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ therapist_id: therapistId }),
-        }
-      );
-
-      if (response.ok) {
-        alert("Request sent successfully!");
-        const updatedList = [...requestedTherapists, therapistId];
-        setRequestedTherapists(updatedList);
-        localStorage.setItem(
-          "requestedTherapists",
-          JSON.stringify(updatedList)
-        );
-      } else {
-        const data = await response.json();
-        alert(data.error || "Failed to send request.");
-      }
-    } catch (error) {
-      console.error("Error sending request:", error);
-      alert("Server error. Please try again.");
-    } finally {
-      setRequestingId(null);
-    }
+    // Simply navigate to the treatment page without making the API call
+    navigate(`/treatment/${therapist.therapist_id}`, {
+      state: { therapist }
+    });
+    
+    // Update local state to mark this therapist as requested
+    const updatedList = [...requestedTherapists, therapist.therapist_id];
+    setRequestedTherapists(updatedList);
+    localStorage.setItem(
+      "requestedTherapists",
+      JSON.stringify(updatedList)
+    );
   };
 
   const renderCard = (t) => (
@@ -125,7 +102,7 @@ const TherapistResultsPage = () => {
       </p>
       {t.motto && (
         <p>
-          <strong>Motto:</strong> “{t.motto}”
+          <strong>Motto:</strong> "{t.motto}"
         </p>
       )}
 
@@ -135,17 +112,12 @@ const TherapistResultsPage = () => {
             ? "therapist-button-disabled"
             : ""
         }`}
-        onClick={() => handleRequest(t.therapist_id)}
-        disabled={
-          requestingId === t.therapist_id ||
-          requestedTherapists.includes(t.therapist_id)
-        }
+        onClick={() => handleRequest(t)}
+        disabled={requestedTherapists.includes(t.therapist_id)}
         style={{ marginTop: "10px" }}
       >
         {requestedTherapists.includes(t.therapist_id)
           ? "Request Sent"
-          : requestingId === t.therapist_id
-          ? "Requesting..."
           : "Request Therapist"}
       </button>
     </div>

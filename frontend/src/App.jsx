@@ -14,6 +14,7 @@ import FindMyTherapist from "./components/FindMyTherapist/FindMyTherapist";
 import Patient from "./components/PatientPageComponents/PatientPage";
 import FillUserInfo from "./components/FillUserInfo/FillUserInfo";
 import TherapistResultsPage from "./pages/TherapistResultsPage";
+import StartWithTherapist from "./components/StartWithTherapist/StartWithTherapist"
 
 
 
@@ -37,6 +38,7 @@ function App() {
         <Route path="fillyourinfo" element={<FillUserInfo />} />
         <Route path="psychoeducate" element={<DepressionInfo/>}/>
         <Route path="/therapist-results" element={<TherapistResultsPage />} />
+        <Route path="/treatment/:therapistId" element={<StartWithTherapist />} />
 
       </Routes>
     </BrowserRouter>

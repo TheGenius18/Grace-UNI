@@ -1,0 +1,159 @@
+.treatment-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #00b4d8;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: #0096c7;
+}
+
+.therapist-profile {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.profile-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-header h2 {
+  color: #333;
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.specialization {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0;
+  font-style: italic;
+}
+
+.profile-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.detail-section {
+  margin-bottom: 1rem;
+}
+
+.detail-section h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #00b4d8;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.detail-section p {
+  margin: 0.5rem 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.motto p {
+  font-style: italic;
+  color: #444;
+}
+
+.availability-section {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+.availability-section h3 {
+  color: #333;
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.availability-section p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.treatment-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 180, 216, 0.2);
+  border-top-color: #00b4d8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.treatment-error {
+  text-align: center;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.treatment-error h3 {
+  color: #c62828;
+  font-size: 1.5rem;
+}
+
+.treatment-error button {
+  background-color: #00b4d8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.treatment-error button:hover {
+  background-color: #0096c7;
+}
+
+@media (max-width: 768px) {
+  .treatment-container {
+    padding: 1rem;
+  }
+  
+  .profile-details {
+    grid-template-columns: 1fr;
+  }
+}
