@@ -1,4 +1,3 @@
-// src/components/forms/TherapistForm.jsx
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useContext } from "react";
 import axios from "axios";
@@ -46,7 +45,7 @@ const TherapistForm = () => {
     setSuccessMessage(null);
 
     try {
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem("access_token");
       const payload = new FormData();
 
       for (const key in formData) {

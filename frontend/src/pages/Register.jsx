@@ -8,7 +8,7 @@ export default function Register() {
     email: "",
     password: "",
     passwordcheck: "",
-    user_type: "patient",
+    user_type: "",
   });
   const handleChange = (e) => {
     setFormData({

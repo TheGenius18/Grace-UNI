@@ -60,9 +60,7 @@ class UserTests(APITestCase):
         self.assertEqual(token_verifier.validate({"token": access}), {})
 
     def test_token_authentication(self):
-        """
-        Checks for login functionality for token authentictation
-        """
+      
 
         url = reverse("token_obtain_pair")
         data = {

@@ -154,12 +154,30 @@ class TreatmentPlanSerializer(serializers.ModelSerializer):
 
 class AppointmentSerializer(serializers.ModelSerializer):
     patient = PatientSerializer(read_only=True)
+    date = serializers.SerializerMethodField()
+    time = serializers.SerializerMethodField()
 
     class Meta:
         model = Appointment
-        fields = ['id', 'patient', 'therapist', 'date', 'time', 'status', 'created_at']
-        read_only_fields = ['status', 'created_at']
+        fields = [
+            'id',
+            'patient',
+            'therapist',
+            'appointment_number',
+            'scheduled_time',
+            'end_time',
+            'status',
+            'created_at',
+            'date',
+            'time',
+        ]
+        read_only_fields = ['status', 'created_at', 'patient', 'appointment_number']
 
+    def get_date(self, obj):
+        return obj.scheduled_time.date()
+
+    def get_time(self, obj):
+        return obj.scheduled_time.time().strftime('%H:%M:%S')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -265,3 +283,15 @@ class TherapistNotificationSerializer(serializers.ModelSerializer):
         return obj.is_emergency
 
 
+class BeginTreatmentSerializer(serializers.Serializer):
+    therapist_id = serializers.IntegerField()
+
+class AppointmentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ['scheduled_time', 'end_time', 'notes']
+        
+    def validate(self, data):
+        if data['end_time'] <= data['scheduled_time']:
+            raise serializers.ValidationError("End time must be after start time")
+        return data

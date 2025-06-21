@@ -48,7 +48,6 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        // Initialize menu functionality after component mounts
         const openMenuBtn = document.querySelector(".open-menu");
         const closeMenuBtn = document.querySelector(".close-menu");
         const navLinksContainer = document.querySelector(".nav-links-container");

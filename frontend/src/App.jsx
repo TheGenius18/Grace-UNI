@@ -15,6 +15,7 @@ import Patient from "./components/PatientPageComponents/PatientPage";
 import FillUserInfo from "./components/FillUserInfo/FillUserInfo";
 import TherapistResultsPage from "./pages/TherapistResultsPage";
 import StartWithTherapist from "./components/StartWithTherapist/StartWithTherapist"
+import TreatmentConfirmation from "./components/StartWithTherapist/TreatmentConfirmation/TreatmentConfirmation"
 
 
 
@@ -39,6 +40,8 @@ function App() {
         <Route path="psychoeducate" element={<DepressionInfo/>}/>
         <Route path="/therapist-results" element={<TherapistResultsPage />} />
         <Route path="/treatment/:therapistId" element={<StartWithTherapist />} />
+        <Route path="/treatment-confirmation/:therapistId" element={<TreatmentConfirmation />} />
+
 
       </Routes>
     </BrowserRouter>

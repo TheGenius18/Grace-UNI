@@ -168,7 +168,6 @@
     }
   }
   
-  /* Background styles */
   .fill-info-background {
     position: fixed;
     top: 0;
@@ -184,7 +183,6 @@
     z-index: -1;
   }
   
-  /* Responsive adjustments */
   @media (max-width: 768px) {
     .fill-info-form {
       margin: 20px;

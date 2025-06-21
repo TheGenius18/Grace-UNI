@@ -31,9 +31,6 @@ class RegisterTokenSerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.ModelSerializer):
 
-    """
-    Room Serialiser
-    """
 
     room_id = serializers.SerializerMethodField()
     created_on = serializers.DateTimeField(

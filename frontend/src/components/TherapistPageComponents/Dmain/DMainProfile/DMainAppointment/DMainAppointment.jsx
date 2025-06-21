@@ -1,129 +1,237 @@
-
-import React from 'react';
-import { useState, useContext, useEffect } from 'react';
-import './DMainAppointment.css';
+import React, { useState, useEffect, useContext } from 'react';
 import { Context } from '../../../../../context/context';
 import axios from 'axios';
+import './DMainAppointment.css';
 
 const AppointmentComponent = () => {
     const { DMainChanger, setDMainChanger, user } = useContext(Context);
-    const [appointments, setAppointments] = useState({});
+    const [appointments, setAppointments] = useState([]);
+    const [groupedAppointments, setGroupedAppointments] = useState({});
     const [activeDay, setActiveDay] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [statusFilter, setStatusFilter] = useState('all');
 
-    // Fetch appointments from backend
     useEffect(() => {
         const fetchAppointments = async () => {
+            setLoading(true);
+            setError(null);
+            
             try {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    return;
+                }
+
                 const response = await axios.get(
-                    "http://127.0.0.1:8000/appointments/manage/",
+                    "http://127.0.0.1:8000/api/appointments/manage/",
                     {
                         headers: {
-                            "Authorization": `Bearer ${user.token}`, // Assuming token auth
+                            "Authorization": `Bearer ${token}`,
                             "Content-Type": "application/json",
                         },
                     }
                 );
 
-                const backendAppointments = response.data;
-                const formattedAppointments = formatAppointmentsByDay(backendAppointments);
-                setAppointments(formattedAppointments);
-            } catch (error) {
-                console.error("Error fetching appointments:", error);
-                setError("Failed to load appointments");
+                const appointmentsData = response.data;
+                setAppointments(appointmentsData);
+                formatAppointmentsByDay(appointmentsData);
+            } catch (err) {
+                if (err.response?.status === 401) {
+                    localStorage.removeItem('access_token');
+                } else {
+                    setError(
+                        err.response?.data?.message || 
+                        "Failed to load appointments. Please try again later."
+                    );
+                }
             } finally {
                 setLoading(false);
             }
         };
 
-        if (user && user.token) {
-            fetchAppointments();
-        }
-    }, [user]);
+        fetchAppointments();
+    }, [statusFilter]);
 
-    // Group appointments by day
-    const formatAppointmentsByDay = (backendAppointments) => {
-        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        const formatted = {};
-
+    const formatAppointmentsByDay = (appointmentsData) => {
+        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const grouped = {};
+        
         daysOfWeek.forEach(day => {
-            formatted[day] = [];
+            grouped[day] = [];
         });
 
-        backendAppointments.forEach(appointment => {
-            const date = new Date(appointment.date);
-            const dayIndex = date.getDay(); // Sunday = 0, Monday = 1...
-            const dayName = daysOfWeek[(dayIndex + 6) % 7]; // Convert to Monday-first
+        const filteredAppointments = statusFilter === 'all' 
+            ? appointmentsData 
+            : appointmentsData.filter(appt => appt.status === statusFilter);
 
-            formatted[dayName].push({
+        filteredAppointments.forEach(appointment => {
+            const appointmentDate = new Date(`${appointment.date}T${appointment.time}`);
+            const dayName = daysOfWeek[appointmentDate.getDay()];
+            
+            grouped[dayName].push({
                 id: appointment.id,
                 time: formatTime(appointment.time),
-                patient: appointment.patient.user.first_name + ' ' + appointment.patient.user.last_name,
-                type: appointment.notes || 'Therapy Session',
-                status: appointment.status
+                patient: appointment.patient.user.full_name || 
+                         `${appointment.patient.user.first_name} ${appointment.patient.user.last_name}`,
+                status: appointment.status,
+                date: appointment.date,
+                created_at: appointment.created_at
             });
         });
 
-        return formatted;
+        setGroupedAppointments(grouped);
     };
 
-    // Format time to AM/PM
     const formatTime = (timeString) => {
         if (!timeString) return '';
         const [hours, minutes] = timeString.split(':');
         const hour = parseInt(hours);
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        const displayHour = hour % 12 || 12;
-        return `${displayHour}:${minutes} ${ampm}`;
+        return `${hour > 12 ? hour - 12 : hour}:${minutes} ${hour >= 12 ? 'PM' : 'AM'}`;
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString([], { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
     };
 
     const toggleDay = (day) => {
         setActiveDay(activeDay === day ? null : day);
     };
 
+    const handleStatusChange = async (appointmentId, newStatus) => {
+        try {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                return;
+            }
+
+            await axios.patch(
+                `http://127.0.0.1:8000/api/appointments/manage/`,
+                {
+                    appointment_id: appointmentId,
+                    status: newStatus
+                },
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            );
+            
+            setAppointments(prev => prev.map(appt => 
+                appt.id === appointmentId ? { ...appt, status: newStatus } : appt
+            ));
+            
+            formatAppointmentsByDay(appointments.map(appt => 
+                appt.id === appointmentId ? { ...appt, status: newStatus } : appt
+            ));
+        } catch (err) {
+            setError(
+                err.response?.data?.message || 
+                "Failed to update appointment. Please try again."
+            );
+        }
+    };
+
     if (loading) {
-        return <div className="appointment-container">Loading appointments...</div>;
+        return (
+            <div className="appointment-container loading">
+                <div className="spinner"></div>
+                <p>Loading appointments...</p>
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="appointment-container error">{error}</div>;
+        return (
+            <div className="appointment-container error">
+                <p>{error}</p>
+                <button onClick={() => window.location.reload()}>Try Again</button>
+            </div>
+        );
     }
 
     return (
         <div className="appointment-container">
-            <p className='reschaduling'>
-                To change your schedule for the time you're available go to
-                <button onClick={() => setDMainChanger("freetimes")}>free times</button>
-            </p>
+            <div className="appointment-header">
+                <h2>Your Appointments</h2>
+                <div className="rescheduling-link">
+                    <p>To change your availability, go to </p>
+                    <button onClick={() => setDMainChanger("freetimes")}>Free Times</button>
+                </div>
+            </div>
+
+            <div className="appointment-filters">
+                <label>Filter by Status:</label>
+                <select 
+                    value={statusFilter} 
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                    <option value="all">All Appointments</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
 
             <div className="appointment-grid">
-                {Object.entries(appointments).map(([day, slots]) => (
-                    <div key={day}>
-                        <div
-                            className={`grid-day ${activeDay === day ? 'active' : ''}`}
-                            onClick={() => toggleDay(day)}
-                        >
-                            {day}
-                            <span className="day-indicator">{slots.length} appt{slots.length !== 1 ? 's' : ''}</span>
-                        </div>
+                {Object.entries(groupedAppointments).map(([day, slots]) => (
+                    slots.length > 0 && (
+                        <div key={day} className="day-container">
+                            <div
+                                className={`day-header ${activeDay === day ? 'active' : ''}`}
+                                onClick={() => toggleDay(day)}
+                            >
+                                <h3>{day}</h3>
+                                <span className="appointment-count">
+                                    {slots.length} appointment{slots.length !== 1 ? 's' : ''}
+                                </span>
+                            </div>
 
-                        <div className={`grid-slots ${activeDay === day ? 'expanded' : ''}`}>
-                            {slots.length > 0 ? (
-                                slots.map(slot => (
-                                    <div key={slot.id} className="appointment-slot">
-                                        <div className="slot-time">{slot.time}</div>
-                                        <div className="slot-patient">{slot.patient}</div>
-                                        <div className={`slot-status ${slot.status}`}>{slot.status}</div>
+                            <div className={`day-slots ${activeDay === day ? 'expanded' : ''}`}>
+                                {slots.map(slot => (
+                                    <div key={slot.id} className={`appointment-slot ${slot.status}`}>
+                                        <div className="slot-time">
+                                            {slot.time}
+                                        </div>
+                                        <div className="slot-details">
+                                            <div className="slot-patient">{slot.patient}</div>
+                                            <div className="slot-date">{formatDate(slot.date)}</div>
+                                        </div>
+                                        <div className="slot-actions">
+                                            <select
+                                                value={slot.status}
+                                                onChange={(e) => handleStatusChange(slot.id, e.target.value)}
+                                                disabled={slot.status === 'completed'}
+                                            >
+                                                <option value="scheduled">Scheduled</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                ))
-                            ) : (
-                                <div className="no-appointments">No appointments scheduled</div>
-                            )}
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )
                 ))}
             </div>
+
+            {appointments.length === 0 && !loading && (
+                <div className="no-appointments">
+                    <p>No appointments found</p>
+                    <button onClick={() => setDMainChanger("freetimes")}>
+                        Set Your Availability
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

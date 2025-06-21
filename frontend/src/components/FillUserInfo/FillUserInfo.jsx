@@ -12,7 +12,6 @@ const InformationPage = () => {
   });
   const navigate = useNavigate();
 
-  // Enhanced token retrieval with fallbacks
   const getAuthToken = () => {
     return (
       localStorage.getItem('access_token')
@@ -54,7 +53,6 @@ const InformationPage = () => {
     } catch (error) {
       console.error('User data fetch error:', error);
       
-      // Clear invalid token
       localStorage.removeItem('access_token');
       localStorage.removeItem('accessToken');
       sessionStorage.removeItem('access_token');
@@ -85,12 +83,10 @@ const InformationPage = () => {
   };
 
   useEffect(() => {
-    // Add slight delay to ensure token is available after login redirect
     const timer = setTimeout(fetchUserData, 100);
     return () => clearTimeout(timer);
   }, []);
 
-  // Loading state
   if (authState.loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -102,7 +98,6 @@ const InformationPage = () => {
     );
   }
 
-  // Error state (should be redirected but kept as fallback)
   if (authState.error) {
     return (
       <div className="max-w-md mx-auto mt-10 p-6 bg-red-50 rounded-lg">
@@ -118,7 +113,6 @@ const InformationPage = () => {
     );
   }
 
-  // Success states
   switch (authState.userType) {
     case 'patient':
       return <PatientForm />;

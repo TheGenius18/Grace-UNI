@@ -106,7 +106,6 @@ const TherapistCard = ({ therapist }) => {
   );
 };
 
-// Sample data
 TherapistCard.defaultProps = {
   therapist: {
     id: 1,

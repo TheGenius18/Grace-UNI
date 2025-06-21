@@ -30,7 +30,6 @@ const PatientTreatmentComponent = () => {
     fetchTreatmentData();
   }, []);
 
-  // Calculate time until next session
   useEffect(() => {
     if (!treatmentData?.next_session) return;
 
@@ -57,7 +56,6 @@ const PatientTreatmentComponent = () => {
   if (loading) return <div className="patient-treatment-container">Loading...</div>;
   if (error) return <div className="patient-treatment-container">Error: {error}</div>;
 
-  // No therapist assigned
   if (treatmentData && !treatmentData.has_therapist) {
     return (
       <div className="patient-treatment-container">
@@ -79,7 +77,6 @@ const PatientTreatmentComponent = () => {
     );
   }
 
-  // Has therapist but no treatment plan
   if (treatmentData && !treatmentData.has_plan) {
     return (
       <div className="patient-treatment-container">
@@ -115,12 +112,10 @@ const PatientTreatmentComponent = () => {
     );
   }
 
-  // Has therapist and treatment plan
   const progressPercentage = Math.round(
     (treatmentData.completed_sessions / treatmentData.total_sessions) * 100
   );
 
-  // Recommended content data
   const recommendedTrainings = [
     { id: 1, title: "Cognitive Restructuring", duration: "15 min" },
     { id: 2, title: "Behavioral Activation", duration: "20 min" }
@@ -144,7 +139,6 @@ const PatientTreatmentComponent = () => {
         <p>Progress and resources for your therapy journey</p>
       </div>
 
-      {/* Progress and Therapist Cards */}
       <div className="patient-treatment-progress-section">
         <div className="patient-treatment-progress-card patient-treatment-glow-card">
           <div className="patient-treatment-progress-circle">
@@ -187,7 +181,6 @@ const PatientTreatmentComponent = () => {
         </div>
       </div>
 
-      {/* Session Info */}
       {treatmentData.next_session && (
         <div className="patient-treatment-session-info patient-treatment-glow-card">
           <div className="patient-treatment-session-header">
@@ -238,7 +231,6 @@ const PatientTreatmentComponent = () => {
         </div>
       )}
 
-      {/* Recommended Content */}
       <div className="patient-treatment-recommended-content">
         <div className="patient-treatment-recommended-section patient-treatment-glow-card">
           <h2>Recommended Trainings</h2>

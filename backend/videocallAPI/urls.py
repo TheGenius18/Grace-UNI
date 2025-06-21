@@ -1,15 +1,4 @@
-
-
-
-#router = routers.DefaultRouter()
-#router.register(r"rooms", RoomViewSet)
-
-#urlpatterns = [
-#    path('api/create-room/', CreateRoomAPI.as_view()),
-#    path('api/join-room/<str:room_id>/', JoinRoomAPI.as_view()),
-#    path('', include(router.urls)),
-#=======
-from django.urls import path # type: ignore
+from django.urls import path
 from . import views
 from .views import CreateSessionView, MyInvitationsView
 

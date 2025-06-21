@@ -16,6 +16,62 @@ from rest_framework.decorators import api_view, permission_classes
 from django.core.exceptions import ObjectDoesNotExist
 import json
 from .models import Patient, Therapist, Region, TreatmentPlan
+from datetime import timedelta
+from django.db import transaction
+from rest_framework.exceptions import NotFound
+
+
+class BeginTreatmentJourneyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, therapist_id):
+        try:
+            with transaction.atomic():
+                patient = Patient.objects.get(user=request.user)
+                therapist = Therapist.objects.get(user_id=therapist_id)
+                
+                patient.therapist = therapist
+                patient.save()
+                
+                treatment_plan = TreatmentPlan.objects.create(
+                    therapist=therapist,
+                    patient=patient,
+                    title=f"Initial Treatment Plan for {patient.user.get_full_name()}",
+                    type_of_therapy='cbt', 
+                    number_of_sessions=4   
+                )
+                
+                self.create_notifications(therapist, patient)
+                
+                return Response({
+                    "message": "Treatment journey started successfully",
+                    "therapist": TherapistSerializer(therapist).data,
+                    "treatment_plan": TreatmentPlanSerializer(treatment_plan).data
+                }, status=status.HTTP_201_CREATED)
+                
+        except Patient.DoesNotExist:
+            return Response({"error": "Patient profile not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Therapist.DoesNotExist:
+            return Response({"error": "Therapist not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def create_notifications(self, therapist, patient):
+        TherapistNotification.objects.create(
+            therapist=therapist,
+            patient=patient,
+            notification_type='request',
+            message=f"You have a new patient: {patient.user.get_full_name() or patient.user.username}",
+            related_url=f"/patients/{patient.id}/"
+        )
+        
+        TherapistNotification.objects.create(
+            therapist=therapist,
+            patient=patient,
+            notification_type='general',
+            message=f"Please create an initial treatment plan for {patient.user.get_full_name() or patient.user.username}",
+            related_url=f"/treatment-plans/create/?patient={patient.id}"
+        )
 class UserRegisterationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserRegistrationSerializer
@@ -115,12 +171,57 @@ class AppointmentCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         try:
             patient = Patient.objects.get(user=self.request.user)
+            therapist = patient.therapist
+            
+            if not therapist:
+                raise PermissionDenied("You don't have an assigned therapist")
+            
+            scheduled_time = serializer.validated_data['scheduled_time']
+            end_time = serializer.validated_data['end_time']
+            
+            if not TherapistFreeTime.objects.filter(
+                therapist=therapist,
+                start_time__lte=scheduled_time,
+                end_time__gte=end_time,
+                is_available=True
+            ).exists():
+                raise serializers.ValidationError("The selected time slot is not available")
+            
+            appointment = serializer.save(
+                patient=patient,
+                therapist=therapist,
+                status='scheduled'
+            )
+            
+            TherapistFreeTime.objects.filter(
+                therapist=therapist,
+                start_time__lte=scheduled_time,
+                end_time__gte=end_time
+            ).update(is_available=False)
+            
+            TherapistNotification.objects.create(
+                therapist=therapist,
+                patient=patient,
+                appointment=appointment,
+                notification_type='appointment',
+                message=f"New appointment scheduled with {patient.user.get_full_name()} on {scheduled_time.strftime('%Y-%m-%d at %H:%M')}",
+                related_url=f"/appointments/{appointment.id}/"
+            )
+            
+            reminder_time = scheduled_time - timedelta(days=1)
+            if reminder_time > timezone.now():
+                TherapistNotification.objects.create(
+                    therapist=therapist,
+                    patient=patient,
+                    appointment=appointment,
+                    notification_type='appointment',
+                    message=f"Reminder: Appointment with {patient.user.get_full_name()} tomorrow at {scheduled_time.strftime('%H:%M')}",
+                    related_url=f"/appointments/{appointment.id}/",
+                    created_at=reminder_time
+                )
+                
         except Patient.DoesNotExist:
             raise PermissionDenied("Only patients can create appointments.")
-        
-        serializer.save(patient=patient, status='pending')
-
-
 
 
 class AppointmentManageView(generics.ListCreateAPIView):
@@ -134,11 +235,11 @@ class AppointmentManageView(generics.ListCreateAPIView):
         except Therapist.DoesNotExist:
             return Appointment.objects.none()
 
-    def post(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         appointment_id = request.data.get("appointment_id")
-        status_update = request.data.get("status")
+        new_status = request.data.get("status")
 
-        if status_update not in ['approved', 'declined', 'cancelled']:
+        if new_status not in ['scheduled', 'completed', 'cancelled', 'no_show']:
             return Response({"error": "Invalid status."}, status=400)
 
         try:
@@ -147,10 +248,9 @@ class AppointmentManageView(generics.ListCreateAPIView):
         except (Therapist.DoesNotExist, Appointment.DoesNotExist):
             return Response({"error": "Appointment not found or not authorized."}, status=404)
 
-        appointment.status = status_update
+        appointment.status = new_status
         appointment.save()
-        return Response(AppointmentSerializer(appointment).data, status=200)
-    
+        return Response(AppointmentSerializer(appointment).data, status=200)    
 
 class ArticleCreateView(generics.CreateAPIView):
     serializer_class = ArticleSerializer
@@ -292,35 +392,44 @@ class SaveDiagnosisView(APIView):
             return Response({"error": "Patient profile not found."}, status=404)
 
 class TherapistFreeTimeListCreateView(generics.ListCreateAPIView):
-    queryset = TherapistFreeTime.objects.all()
     serializer_class = TherapistFreeTimeSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if not hasattr(user, 'therapist'):
+            raise NotFound("Therapist profile not found.")
+
+        return TherapistFreeTime.objects.filter(therapist=user.therapist).order_by('day', 'start_time')
 
     def perform_create(self, serializer):
-        
-    
-        therapist = Therapist.objects.get(user=self.request.user)
-        serializer.save(therapist=therapist)
+        user = self.request.user
 
+        if not hasattr(user, 'therapist'):
+            raise NotFound("Therapist profile not found.")
+
+        serializer.save(therapist=user.therapist)
 class TherapistFreeTimeDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = TherapistFreeTime.objects.all()
     serializer_class = TherapistFreeTimeSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-       
         if self.request.user.is_therapist:
             return self.queryset.filter(therapist__user=self.request.user)
-        return self.queryset
+        return self.queryset.none()
 
 class TherapistFreeTimeByTherapistView(generics.ListAPIView):
     serializer_class = TherapistFreeTimeSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        therapist_id = self.kwargs['therapist_id']
-        return TherapistFreeTime.objects.filter(therapist_id=therapist_id, is_available=True)
-
+        therapist_id = self.kwargs['pk']
+        return TherapistFreeTime.objects.filter(
+            therapist_id=therapist_id,
+            is_available=True
+        ).order_by('day', 'start_time')
 class TherapistFreeTimeAvailabilityView(generics.UpdateAPIView):
     queryset = TherapistFreeTime.objects.all()
     serializer_class = TherapistFreeTimeSerializer
@@ -496,17 +605,15 @@ class EmergencyNotificationView(APIView):
         if not emergency_title:
             return Response({"error": "Emergency title is required."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create the notification
         notification = TherapistNotification.objects.create(
             therapist=patient.therapist,
             message=f"Your patient {patient.get_full_name() or patient.user.username} had this emergency: {emergency_title}",
-            related_url=f"/patient/{patient.id}/",  # Adjust this URL as needed
+            related_url=f"/patient/{patient.id}/", 
             emergency_title=emergency_title,
             emergency_description=emergency_description,
             patient=patient
         )
 
-        # You might want to add additional logic here, like sending an email or push notification
 
         serializer = TherapistNotificationSerializer(notification)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -528,14 +635,12 @@ class PatientTreatmentView(generics.RetrieveAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Check if patient has a therapist
         if not patient.therapist:
             return Response({
                 "has_therapist": False,
                 "message": "Begin your treatment journey by selecting a therapist"
             })
         
-        # Get active treatment plan
         treatment_plan = TreatmentPlan.objects.filter(
             patient=patient,
             is_active=True
@@ -548,7 +653,6 @@ class PatientTreatmentView(generics.RetrieveAPIView):
                 "message": "Your therapist will create a treatment plan for you soon"
             })
         
-        # Get next upcoming session
         next_session = Appointment.objects.filter(
             patient=patient,
             status='scheduled',

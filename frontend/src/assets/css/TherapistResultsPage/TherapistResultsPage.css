@@ -1,0 +1,185 @@
+.therapist-results-container {
+  background: linear-gradient(135deg, rgb(255, 255, 255) 0%, rgba(167, 193, 193, 0.4) 100%);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2d3748;
+}
+
+.back-button {
+  background: #4a6fa5;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.back-button:hover {
+  background: #3a5a80;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.error-message {
+  background: #fff5f5;
+  color: #e53e3e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border-left: 4px solid #e53e3e;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.spinner {
+  border: 5px solid rgba(74, 111, 165, 0.2);
+  border-radius: 50%;
+  border-top: 5px solid #4a6fa5;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.therapists-section {
+  margin-bottom: 3rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.section-title {
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: #4a6fa5;
+  border-radius: 3px;
+}
+
+.therapists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.therapist-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.therapist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.therapist-card-header {
+  background: #4a6fa5;
+  color: white;
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.therapist-card-header h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.therapist-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.therapist-card-body {
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+
+.label {
+  font-weight: 600;
+  color: #4a6fa5;
+  display: inline-block;
+  min-width: 120px;
+}
+
+.therapist-motto {
+  font-style: italic;
+  color: #4a5568;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.request-btn {
+  background: #4a6fa5;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  margin: 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.request-btn:hover:not(.disabled) {
+  background: #3a5a80;
+  transform: translateY(-2px);
+}
+
+.request-btn.disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.no-results {
+  text-align: center;
+  color: #718096;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}

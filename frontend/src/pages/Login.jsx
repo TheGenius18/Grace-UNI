@@ -45,7 +45,6 @@ export default function Login() {
     setIsLoading(true);
     
     try {
-      // Step 1: Login to get tokens
       const response = await axios.post(
         "http://127.0.0.1:8000/api/login/",
         formData,
@@ -59,14 +58,12 @@ export default function Login() {
       console.log("Success!", response.data);
       setSccessMessage("Login Successful");
       
-      // Store tokens
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       const accessToken = response.data.tokens.access;
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", response.data.tokens.refresh);
       
-      // Step 2: Fetch user info to get user_type
       const userInfo = await fetchUserInfo(accessToken);
       console.log("User info:", userInfo);
       
@@ -76,14 +73,12 @@ export default function Login() {
       } else if (userInfo.user_type === "patient") {
         window.location.href = "/patient";
       } else {
-        // Default redirect if user_type is not recognized
         window.location.href = "/";
       }
       
     } catch (error) {
       console.log("Error during Login", error.response?.data);
       if (error.response && error.response.data) {
-        // Handle field-specific errors
         const errorData = error.response.data;
         if (typeof errorData === 'object') {
           const firstErrorKey = Object.keys(errorData)[0];

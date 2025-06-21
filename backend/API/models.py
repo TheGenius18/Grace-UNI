@@ -1,4 +1,4 @@
-from django.db import models # type: ignore
+from django.db import models 
 from django.contrib.auth.models import AbstractUser
 
 from rest_framework import serializers
@@ -165,6 +165,18 @@ class TherapistFreeTime(models.Model):
     end_time = models.DateTimeField()
     is_available = models.BooleanField(default=True)
     
+    def mark_as_unavailable(self):
+        self.is_available = False
+        self.save()
+        
+    @classmethod
+    def find_available_slot(cls, therapist, start_time, end_time):
+        return cls.objects.filter(
+            therapist=therapist,
+            start_time__lte=start_time,
+            end_time__gte=end_time,
+            is_available=True
+        ).first()
     def __str__(self):
         return f"{self.therapist.user.email} available from {self.start_time} to {self.end_time}"
 

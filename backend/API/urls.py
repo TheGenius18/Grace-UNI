@@ -25,10 +25,7 @@ urlpatterns = [
     path("video/", include("videocallAPI.urls")),
     path('chatbot/message/', ChatbotMessageAPIView.as_view(), name='chatbot-message'),
     path('chatbot/save-diagnosis/', SaveDiagnosisView.as_view(), name='save-diagnosis'),
-    path('free-times/<int:pk>/availability/', TherapistFreeTimeAvailabilityView.as_view(), name='free-time-availability'),
     path('therapists/<int:therapist_id>/free-times/', TherapistFreeTimeByTherapistView.as_view(), name='therapist-free-times'),
-    path('free-times/<int:pk>/', TherapistFreeTimeDetailView.as_view(), name='free-time-detail'),    
-    path('free-times/', TherapistFreeTimeListCreateView.as_view(), name='free-time-list-create'),
     path('profile/', complete_profile, name='complete_profile'),
     path('therapists/', TherapistListView.as_view(), name='therapist-list'),
     path("request-therapist/", RequestTherapistView.as_view(), name="request-therapist"),
@@ -37,7 +34,10 @@ urlpatterns = [
     path("patients/<int:patient_id>/", get_patient_profile),
     path("notifications/emergency/", EmergencyNotificationView.as_view(), name="emergency-notification"),
     path('patient/treatment/', PatientTreatmentView.as_view(), name='patient-treatment'),
-
-   
+    path('treatment/begin/<int:therapist_id>/', BeginTreatmentJourneyView.as_view(), name='begin-treatment'),
+    path('free-times/', TherapistFreeTimeListCreateView.as_view(), name='therapist-free-time-list-create'),
+    path('free-times/<int:pk>/', TherapistFreeTimeDetailView.as_view(), name='therapist-free-time-detail'),
+    path('free-times/<int:pk>/availability/', TherapistFreeTimeAvailabilityView.as_view(), name='therapist-free-time-availability'),
+    path('free-times/by-therapist/<int:pk>/', TherapistFreeTimeByTherapistView.as_view(), name='therapist-free-time-by-therapist'),
 
 ]

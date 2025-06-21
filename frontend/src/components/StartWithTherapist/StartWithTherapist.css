@@ -157,3 +157,63 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.begin-journey-section {
+  margin-top: 40px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.begin-journey-button {
+  background-color:rgb(23, 198, 214);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.begin-journey-button:hover {
+  background-color:rgb(21, 137, 144);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.begin-journey-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.begin-journey-button:active {
+  transform: translateY(0);
+}
+
+
+.treatment-status-badge {
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  display: inline-block;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.begin-journey-section {
+  margin-top: 30px;
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #eee;
+}

@@ -1,5 +1,3 @@
-// src/components/FindMyTherapist/FindMyTherapist.jsx
-
 import React, { useState, useEffect } from "react";
 import "./FindMyTherapist.css";
 import { useNavigate } from "react-router-dom";
@@ -84,7 +82,7 @@ const TherapistForm = () => {
       setTimeout(() => {
         navigate("/therapist-results", { state: { formData } });
         setIsSubmitting(false);
-      }, 1000); // simulate processing delay
+      }, 1000); 
     }
   };
 
@@ -130,7 +128,6 @@ const TherapistForm = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="find-my-therapist-form">
-          {/* STEP 1 */}
           {currentStep === 1 && (
             <div className="find-my-therapist-form-step find-my-therapist-fade-in">
               <div className="find-my-therapist-form-group">
@@ -194,7 +191,6 @@ const TherapistForm = () => {
             </div>
           )}
 
-          {/* STEP 2 */}
           {currentStep === 2 && (
             <div className="find-my-therapist-form-step find-my-therapist-fade-in">
               <div className="find-my-therapist-form-group">
@@ -265,7 +261,6 @@ const TherapistForm = () => {
             </div>
           )}
 
-          {/* STEP 3 */}
           {currentStep === 3 && (
             <div className="find-my-therapist-form-step find-my-therapist-fade-in">
               <div className="find-my-therapist-form-group">

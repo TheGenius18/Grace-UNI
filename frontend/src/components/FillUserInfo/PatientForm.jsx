@@ -1,4 +1,3 @@
-// src/components/forms/PatientForm.jsx
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useContext } from "react";
 import axios from "axios";
