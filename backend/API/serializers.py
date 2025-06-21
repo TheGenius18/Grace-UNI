@@ -77,15 +77,15 @@ class PatientSerializer(serializers.ModelSerializer):
             'marital_status',
             'therapist'
         ]
-    # def validate_age(self, value):
-    #     if value < 18 or value > 90:
-    #         raise serializers.ValidationError("Age must be between 18 and 90")
-    #     return value
+    def validate_age(self, value):
+        if value < 18 or value > 90:
+            raise serializers.ValidationError("Age must be between 18 and 90")
+        return value
         
-    # def validate_gender(self, value):
-    #     if value.lower() not in ['male', 'female']:
-    #         raise serializers.ValidationError("Gender must be either male or female")
-    #     return value.lower()
+    def validate_gender(self, value):
+        if value.lower() not in ['male', 'female']:
+            raise serializers.ValidationError("Gender must be either male or female")
+        return value.lower()
 
 
 class TherapistSerializer(serializers.ModelSerializer):

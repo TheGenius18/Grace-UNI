@@ -24,6 +24,7 @@ const PatientForm = () => {
       ...prev,
       [name]: value,
     }));
+    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -36,7 +37,7 @@ const PatientForm = () => {
       const token = localStorage.getItem("access_token");
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/profile/",
+        "http://127.0.0.1:8000/api/profile/view/",
         formData,
         {
           headers: {

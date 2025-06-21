@@ -12,7 +12,6 @@ const PatientNavbar = () => {
     setActiveButton(buttonName);
     setPMainChanger(buttonName);
     
-    // Create ripple effect only for the clicked button
     const button = e.currentTarget;
     const rect = button.getBoundingClientRect();
     const x = e.clientX - rect.left;

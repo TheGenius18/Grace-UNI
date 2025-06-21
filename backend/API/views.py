@@ -139,12 +139,22 @@ class UserProfileView(APIView):
         return Response(serializer.data)
     
     def post(self, request):
+        print("\n=== INCOMING REQUEST DATA ===")  # Debugging
+        print("Headers:", request.headers)
+        print("User:", request.user)
+        print("Data:", request.data)
+        print("Method:", request.method)
+        print("Content-Type:", request.content_type)
+        
         user = request.user
         required_fields = ['age', 'gender', 'sibling_order', 'marital_status']
         
-        if not all(field in request.data for field in required_fields):
+        print("\nChecking required fields...")  # Debugging
+        missing_fields = [field for field in required_fields if field not in request.data]
+        if missing_fields:
+            print(f"Missing fields: {missing_fields}")  # Debugging
             return Response(
-                {"error": f"Missing required fields. Required: {required_fields}"},
+                {"error": f"Missing required fields: {missing_fields}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -153,7 +163,15 @@ class UserProfileView(APIView):
             serializer = PatientSerializer(patient, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            if not user.is_profile_complete:
+                user.is_profile_complete = True
+                user.save()
+                
+            return Response({
+                "status": "created" if created else "updated",
+                "data": serializer.data
+            }, status=status.HTTP_200_OK)
             
         except serializers.ValidationError as e:
             return Response({"error": e.detail}, status=status.HTTP_400_BAD_REQUEST)

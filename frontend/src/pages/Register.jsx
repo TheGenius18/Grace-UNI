@@ -8,7 +8,7 @@ export default function Register() {
     email: "",
     password: "",
     passwordcheck: "",
-    user_type: "",
+    user_type: "patient",
   });
   const handleChange = (e) => {
     setFormData({
@@ -40,7 +40,7 @@ export default function Register() {
       );
       console.log("Success!", response.data);
       setSccessMessage("Register Successfull");
-      window.location.href = "/login";
+      window.location.href = "/fillyourinfo";
     } catch (error) {
       console.log("Error during registrations", error.response?.data);
       if (error.response && error.response.data) {

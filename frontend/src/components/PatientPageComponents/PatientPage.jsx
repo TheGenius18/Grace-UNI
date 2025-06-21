@@ -5,7 +5,7 @@ import TrainingMenu from './PatientTrainingAndSkills/PatientTrainingMenu/Patient
 import TrainingMain from './PatientTrainingAndSkills/PatientTrainingMain/PatientTrainingMain';
 import Treatment from './PatientMainTreatment/patientMainTreatment';
 import TrainingChanger from './PatientTrainingAndSkills/PatientTrainingMain/PatientTrainingTools/PatientTrainingChanger/PatientTrainingChanger';
-
+import Profile from "./PatientProfile/PatientProfile"
 
 
 import './PatientPage.css';
@@ -37,6 +37,11 @@ const PatientDashboard = () => {
         {PMainChanger=="treatment"?
             <div className="patient-treatment">
                 <Treatment/>
+            </div>
+        :null}
+        {PMainChanger=="profile"?
+            <div className="patient-treatment">
+                <Profile/>
             </div>
         :null}
         
