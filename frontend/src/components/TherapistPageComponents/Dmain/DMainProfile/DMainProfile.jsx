@@ -57,7 +57,7 @@ export default function DMainProfile() {
     };
 
     const actionItems = [
-        { id: "cv", label: "My CV", icon: "📄" },
+        { id: "cv", label: "My CV & info", icon: "📄" },
         { id: "articles", label: "Articles", icon: "📚" },
         { id: "memo", label: "Memo", icon: "📝" }
     ];

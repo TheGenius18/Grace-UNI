@@ -92,20 +92,72 @@ class TherapistSerializer(serializers.ModelSerializer):
     therapist_id = serializers.IntegerField(source='user.id', read_only=True)
     user = CustomUserSerializer(read_only=True)
     patients = serializers.SerializerMethodField()
+    education = serializers.SerializerMethodField()
+    experiences = serializers.SerializerMethodField()
+    specializations = serializers.SerializerMethodField()
+    languages = serializers.SerializerMethodField()
 
     class Meta:
         model = Therapist
         fields = [
-            'therapist_id', 'user', 'age', 'gender',
-            'marital_status', 'education',
-            'experience', 'specialization',
-            'availability', 'motto', 'rank',
-            'region', 'patients'
+            'therapist_id', 'user', 'age', 'gender', 'marital_status', 
+            'education', 'experiences', 'specializations', 'languages',
+            'availability', 'motto', 'rank', 'region', 'patients',
+            'education_degree', 'education_institution', 'education_field', 
+            'education_year', 'education_verified',
+            'experience_years', 'experience_position', 'experience_organization',
+            'experience_start_date', 'experience_end_date', 'experience_current',
+            'experience_description',
+            'specialization_name', 'specialization_description',
+            'language_name', 'language_proficiency',
+            'additional_degrees', 'previous_positions', 
+            'other_specializations', 'other_languages'
         ]
 
     def get_patients(self, obj):
         return [p.user.get_full_name() for p in obj.patients.all()]
 
+    def get_education(self, obj):
+        return {
+            'degree': obj.education_degree,
+            'institution': obj.education_institution,
+            'field': obj.education_field,
+            'year': obj.education_year,
+            'verified': obj.education_verified
+        }
+
+    def get_experiences(self, obj):
+        main_exp = {
+            'position': obj.experience_position,
+            'organization': obj.experience_organization,
+            'start_date': obj.experience_start_date,
+            'end_date': obj.experience_end_date,
+            'current': obj.experience_current,
+            'description': obj.experience_description,
+            'years': obj.experience_years
+        }
+        return {
+            'main_experience': main_exp,
+            'previous_positions': obj.previous_positions
+        }
+
+    def get_specializations(self, obj):
+        return {
+            'main_specialization': {
+                'name': obj.specialization_name,
+                'description': obj.specialization_description
+            },
+            'other_specializations': obj.other_specializations
+        }
+
+    def get_languages(self, obj):
+        return {
+            'main_language': {
+                'name': obj.language_name,
+                'proficiency': obj.language_proficiency
+            },
+            'other_languages': obj.other_languages
+        }
 
 
 class FullProfileSerializer(serializers.Serializer):
@@ -113,17 +165,12 @@ class FullProfileSerializer(serializers.Serializer):
     profile = serializers.SerializerMethodField()
 
     def get_profile(self, obj):
-        if obj.user_type == 'patient':
-            patient = Patient.objects.filter(user=obj).first()
-            return PatientSerializer(patient).data if patient else None
-        elif obj.user_type == 'therapist':
+        if obj.user_type == 'therapist':
             therapist = Therapist.objects.filter(user=obj).first()
-            return TherapistSerializer(therapist).data if therapist else None
+            if therapist:
+                serializer = TherapistSerializer(therapist)
+                return serializer.data
         return None
-
-
-
-
 
 class TreatmentGoalSerializer(serializers.ModelSerializer):
     class Meta:

@@ -92,7 +92,7 @@ export default function Home() {
             setLoggedIn(false);
             setUsername("");
             setUserType(null);
-            window.location.href = "/";
+            window.location.href = "/home";
         } catch (error) {
             console.error("Logout failed", error);
         }

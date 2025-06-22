@@ -1,6 +1,7 @@
 from django.urls import path, include
 import requests
-
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import *
 from django.contrib import admin
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
@@ -41,3 +42,5 @@ urlpatterns = [
     path('free-times/by-therapist/<int:pk>/', TherapistFreeTimeByTherapistView.as_view(), name='therapist-free-time-by-therapist'),
 
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

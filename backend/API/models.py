@@ -33,9 +33,7 @@ class Region(models.Model):
     
     def __str__(self):
         return f"{self.name}, {self.country}"
-    
 
-    
 class Therapist(models.Model):
     GENDER_CHOICES = (
         ('male', 'Male'),
@@ -49,26 +47,6 @@ class Therapist(models.Model):
         ('widowed', 'Widowed'),
     )
 
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-    
-    
-    rank = models.IntegerField(default=0, help_text="Therapist ranking from 0 to 10")
-    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
-    education = models.CharField(max_length=255, blank=True)
-    age = models.PositiveIntegerField()
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
-    marital_status = models.CharField(max_length=10, choices=MARITAL_STATUS_CHOICES, blank=True, null=True)
-    motto = models.CharField(max_length=255, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-
-    experience = models.PositiveIntegerField(default=0)
-    specialization = models.CharField(max_length=255, blank=True)
-    availability = models.CharField(max_length=255, blank=True)
-    
-    def __str__(self):
-        return f"Therapist: {self.user.email}"
-
-class Education(models.Model):
     DEGREE_CHOICES = (
         ('bachelors', "Bachelor's"),
         ('masters', "Master's"),
@@ -77,44 +55,63 @@ class Education(models.Model):
         ('other', "Other"),
     )
     
-    therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name='educations')
-    degree = models.CharField(max_length=50, choices=DEGREE_CHOICES)
-    institution = models.CharField(max_length=255)
-    field_of_study = models.CharField(max_length=255)
-    year_completed = models.PositiveIntegerField()
-    is_verified = models.BooleanField(default=False)
+    # Basic Info
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
+    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True, blank=True)
+    age = models.PositiveIntegerField()
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    marital_status = models.CharField(max_length=10, choices=MARITAL_STATUS_CHOICES, blank=True, null=True)
+    motto = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     
-    def __str__(self):
-        return f"{self.degree} from {self.institution}"
-
-class Experience(models.Model):
-    therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name='experiences')
-    position = models.CharField(max_length=255)
-    organization = models.CharField(max_length=255)
-    start_date = models.DateField()
-    end_date = models.DateField(null=True, blank=True)
-    current = models.BooleanField(default=False)
-    description = models.TextField(blank=True)
+    # Professional Info
+    rank = models.IntegerField(default=0, help_text="Therapist ranking from 0 to 10")
+    availability = models.CharField(max_length=255, blank=True)
     
-    def __str__(self):
-        return f"{self.position} at {self.organization}"
-
-class Specialization(models.Model):
-    therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name='specializations')
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
+    # Education Fields (previously separate model)
+    education_degree = models.CharField(max_length=50, choices=DEGREE_CHOICES, blank=True)
+    education_institution = models.CharField(max_length=255, blank=True)
+    education_field = models.CharField(max_length=255, blank=True)
+    education_year = models.PositiveIntegerField(null=True, blank=True)
+    education_verified = models.BooleanField(default=False)
     
-    def __str__(self):
-        return self.name
-
-class Language(models.Model):
-    therapist = models.ForeignKey(Therapist, on_delete=models.CASCADE, related_name='languages')
-    name = models.CharField(max_length=50)
-    proficiency = models.CharField(max_length=50, blank=True, null=True)
+    # Experience Fields (previously separate model)
+    experience_years = models.PositiveIntegerField(default=0)
+    experience_position = models.CharField(max_length=255, blank=True)
+    experience_organization = models.CharField(max_length=255, blank=True)
+    experience_start_date = models.DateField(null=True, blank=True)
+    experience_end_date = models.DateField(null=True, blank=True)
+    experience_current = models.BooleanField(default=False)
+    experience_description = models.TextField(blank=True)
     
-    def __str__(self):
-        return self.name
+    # Specialization Fields (previously separate model)
+    specialization_name = models.CharField(max_length=100, blank=True)
+    specialization_description = models.TextField(blank=True)
+    
+    # Language Fields (previously separate model)
+    language_name = models.CharField(max_length=50, blank=True)
+    language_proficiency = models.CharField(max_length=50, blank=True, null=True)
+    
+    # Additional fields for multiple entries (if needed)
+    additional_degrees = models.JSONField(default=list, blank=True)  # For storing multiple degrees
+    previous_positions = models.JSONField(default=list, blank=True)  # For storing multiple positions
+    other_specializations = models.JSONField(default=list, blank=True)  # For storing multiple specializations
+    other_languages = models.JSONField(default=list, blank=True)  # For storing multiple languages
 
+    def __str__(self):
+        return f"Therapist: {self.user.email}"
+
+    @property
+    def full_education(self):
+        if self.education_degree and self.education_institution:
+            return f"{self.education_degree} from {self.education_institution} ({self.education_year})"
+        return "No education information"
+
+    @property
+    def current_experience(self):
+        if self.experience_current and self.experience_position:
+            return f"{self.experience_position} at {self.experience_organization} (since {self.experience_start_date.year})"
+        return "No current position"
 class Patient(models.Model):
     GENDER_CHOICES = (
         ('male', 'Male'),
