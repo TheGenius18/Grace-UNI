@@ -23,7 +23,7 @@ const TherapistAvailability = ({ therapistId }) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/therapists/${therapistId}/availability/`,
+            `http://127.0.0.1:8000/api/free-times/by-therapist/${therapistId}/`,
           {
             headers: {
               "Authorization": `Bearer ${localStorage.getItem('access_token')}`,
