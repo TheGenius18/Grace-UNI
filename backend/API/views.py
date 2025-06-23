@@ -62,7 +62,7 @@ class BeginTreatmentJourneyView(APIView):
             patient=patient,
             notification_type='request',
             message=f"You have a new patient: {patient.user.get_full_name() or patient.user.username}",
-            related_url=f"/patients/{patient.id}/"
+            related_url=f"/patients/{patient.user.id}/"
         )
         
         TherapistNotification.objects.create(
@@ -70,7 +70,7 @@ class BeginTreatmentJourneyView(APIView):
             patient=patient,
             notification_type='general',
             message=f"Please create an initial treatment plan for {patient.user.get_full_name() or patient.user.username}",
-            related_url=f"/treatment-plans/create/?patient={patient.id}"
+            related_url=f"/treatment-plans/create/?patient={patient.user.id}"
         )
 class UserRegisterationAPIView(GenericAPIView):
     permission_classes = (AllowAny,)
