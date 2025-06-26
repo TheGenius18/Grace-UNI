@@ -133,7 +133,8 @@ const EmergencyPage = () => {
       const token = localStorage.getItem('access_token');
       
       const response = await axios.post(
-        '/api/notifications/emergency/',
+          'http://127.0.0.1:8000/api/notifications/emergency/'
+,
         {
           emergency_title: selectedEmergency.title,
           emergency_description: selectedEmergency.description,

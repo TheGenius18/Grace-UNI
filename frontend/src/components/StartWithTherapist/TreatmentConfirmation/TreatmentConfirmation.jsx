@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './TreatmentConfirmation.css';
 
@@ -8,8 +8,13 @@ const TreatmentConfirmation = () => {
     const navigate = useNavigate();
     const { therapist, treatmentPlan } = location.state || {};
 
+    useEffect(() => {
+        if (!therapist || !treatmentPlan) {
+            navigate(`/treatment/${therapistId}`);
+        }
+    }, [therapist, treatmentPlan, therapistId, navigate]);
+
     if (!therapist || !treatmentPlan) {
-        navigate(`/treatment/${therapistId}`);
         return null;
     }
 
@@ -57,7 +62,6 @@ const TreatmentConfirmation = () => {
                 </div>
 
                 <div className="confirmation-actions">
-
                     <button
                         className="secondary-button"
                         onClick={() => navigate('/patient')}

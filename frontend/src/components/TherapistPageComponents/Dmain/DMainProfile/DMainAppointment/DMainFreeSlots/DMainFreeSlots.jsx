@@ -89,6 +89,7 @@ const TherapistAvailability = () => {
     };
 
     const addTimeSlot = async () => {
+
         if (!validateSlot()) return;
 
         setIsLoading(true);

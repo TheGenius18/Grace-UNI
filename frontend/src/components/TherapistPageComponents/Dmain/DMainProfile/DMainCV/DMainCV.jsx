@@ -7,7 +7,6 @@ function DMainCV() {
   const navigate = useNavigate();
 
   const [therapistData, setTherapistData] = useState(null);
-  const [regionInfo, setRegionInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cvUrl, setCvUrl] = useState("");
@@ -31,15 +30,7 @@ function DMainCV() {
           setCvUrl(`http://127.0.0.1:8000${prof.cv}`);
         }
 
-        if (typeof prof.region === "number") {
-          const regionResp = await axios.get(
-            `http://127.0.0.1:8000/api/regions/${prof.region}/`
-          );
-          console.log("Region RESPONSE:", regionResp.data);
-          setRegionInfo(regionResp.data);
-        } else if (prof.region && prof.region.name) {
-          setRegionInfo(prof.region);
-        }
+        
       } catch (err) {
         console.error(err);
         setError(err.message || "Something went wrong");
@@ -107,8 +98,7 @@ function DMainCV() {
             </div>
             <div>
               <p><strong>Gender:</strong> {therapistData.gender ? therapistData.gender[0].toUpperCase() + therapistData.gender.slice(1) : "—"}</p>
-              <p><strong>Marital:</strong> {therapistData.marital_status ? therapistData.marital_status[0].toUpperCase() + therapistData.marital_status.slice(1) : "—"}</p>
-              <p><strong>Region:</strong> {regionInfo ? `${regionInfo.name}, ${regionInfo.country}` : "—"}</p>
+              <p><strong>Marital:</strong> {therapistData.marital_status ? therapistData.marital_status[0].toUpperCase() + therapistData.marital_status.slice(1) : "—"}</p> 
             </div>
           </div>
           {motto && <div className="motto"><p><strong>Motto:</strong> "{motto}"</p></div>}

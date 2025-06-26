@@ -11,75 +11,75 @@ const PatientProfile = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const fetchProfileData = async () => {
-    const accessToken = localStorage.getItem("access_token");
-    
-    if (!accessToken) {
-      setError("No authentication token found. Please log in.");
-      setIsLoading(false);
-      return;
-    }
+    const fetchProfileData = async () => {
+        const accessToken = localStorage.getItem("access_token");
 
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      // Fetch profile data which contains both user and patient info
-      const profileResponse = await axios.get("http://127.0.0.1:8000/api/profile/view/", {
-        headers: {
-          "Authorization": `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      console.log("Full profile response:", profileResponse.data); // Debug log
-
-      // Extract data from the nested profile object
-      const responseData = profileResponse.data?.profile || {};
-      
-      setProfileData({
-        user: responseData.user || null,
-        patient: {
-          age: responseData.age,
-          gender: responseData.gender,
-          sibling_order: responseData.sibling_order,
-          marital_status: responseData.marital_status,
-          diagnosis: responseData.diagnosis,
-          therapist: responseData.therapist
+        if (!accessToken) {
+            setError("No authentication token found. Please log in.");
+            setIsLoading(false);
+            return;
         }
-      });
 
-      setSuccessMessage("Profile loaded successfully");
+        try {
+            setIsLoading(true);
+            setError(null);
 
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-      
-      if (error.response?.status === 404) {
-        // If profile doesn't exist, fetch just user data
-        const userResponse = await axios.get("http://127.0.0.1:8000/api/user/", {
-          headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+            const profileResponse = await axios.get("http://127.0.0.1:8000/api/profile/view/", {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+            });
 
-        setProfileData({
-          user: userResponse.data,
-          patient: null
-        });
+            const profile = profileResponse.data.profile;  // ✅ هنا التصحيح
 
-        setError("Profile not found. Please complete your profile information.");
-      } else {
-        setError(
-          error.response?.data?.error || 
-          error.message || 
-          "Failed to load profile"
-        );
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+            setProfileData({
+                user: {
+                    username: profile.user.username,
+                    email: profile.user.email,
+                    is_profile_complete: profile.user.is_profile_complete,
+                },
+                patient: {
+                    age: profile.age,
+                    gender: profile.gender,
+                    sibling_order: profile.sibling_order,
+                    marital_status: profile.marital_status,
+                    diagnosis: profile.diagnosis,
+                    therapist: profile.therapist,
+                },
+            });
+
+            setSuccessMessage("Profile loaded successfully");
+
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+
+            if (error.response?.status === 404) {
+                const userResponse = await axios.get("http://127.0.0.1:8000/api/user/", {
+                    headers: {
+                        "Authorization": `Bearer ${accessToken}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                setProfileData({
+                    user: userResponse.data,
+                    patient: null
+                });
+
+                setError("Profile not found. Please complete your profile information.");
+            } else {
+                setError(
+                    error.response?.data?.error ||
+                    error.message ||
+                    "Failed to load profile"
+                );
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");

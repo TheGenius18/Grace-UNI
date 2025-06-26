@@ -39,7 +39,7 @@
 
 .d-main-notification {
     width: 95%;
-    min-height: 80px;
+    min-height: 100px;
     height: 80px;
     display: flex;
     flex-direction: row;
@@ -221,4 +221,39 @@
         width: 40px;
         margin: 0 10px;
     }
+}
+
+
+.notification-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.accept-button,
+.view-button {
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.accept-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.view-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.accept-button:hover {
+    background-color: #218838;
+}
+
+.view-button:hover {
+    background-color: #0056b3;
 }

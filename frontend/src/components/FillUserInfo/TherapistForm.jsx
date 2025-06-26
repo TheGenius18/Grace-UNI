@@ -17,6 +17,7 @@ const TherapistForm = () => {
     education_year: new Date().getFullYear(),
     experience_years: 1,
     experience_position: "",
+    sibling_order: "youngest",
     experience_organization: "",
     experience_start_date: "",
     experience_end_date: "",
@@ -178,7 +179,7 @@ const TherapistForm = () => {
       formPayload.append('other_languages', JSON.stringify(otherLanguages));
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/profile/view/",
+        "http://127.0.0.1:8000/api/therapist/profile/",
         formPayload,
         {
           headers: {
