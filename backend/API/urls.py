@@ -40,6 +40,8 @@ urlpatterns = [
     path('free-times/<int:pk>/', TherapistFreeTimeDetailView.as_view(), name='therapist-free-time-detail'),
     path('free-times/<int:pk>/availability/', TherapistFreeTimeAvailabilityView.as_view(), name='therapist-free-time-availability'),
     path('free-times/by-therapist/<int:pk>/', TherapistFreeTimeByTherapistView.as_view(), name='therapist-free-time-by-therapist'),
+    path("therapist/mypatients/", MyPatientsView.as_view(), name="my-patients"),
+    path("therapist/profile/", TherapistProfileView.as_view(), name="therapist-profile"),
 
 ]
 if settings.DEBUG:

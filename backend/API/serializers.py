@@ -1,4 +1,4 @@
-from rest_framework import serializers
+﻿from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import CustomUser, Patient, Therapist ,Appointment,Article, Comment, TherapistNotification, TherapistRequest,Training,TrainingAssignment,TherapistFreeTime,TreatmentPlan, TreatmentGoal, TreatmentSessionTopic
 
@@ -6,10 +6,34 @@ from .models import CustomUser, Patient, Therapist ,Appointment,Article, Comment
 
 
 
+class AppointmentSerializer(serializers.ModelSerializer):
+    patient = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+    time = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Appointment
+        fields = [
+            'id', 'patient', 'therapist', 'appointment_number',
+            'scheduled_time', 'end_time', 'status', 'created_at',
+            'date', 'time'
+        ]
+        read_only_fields = ['status', 'created_at', 'patient', 'appointment_number']
+
+    def get_patient(self, obj):
+        return obj.patient.user.username
+
+    def get_date(self, obj):
+        return obj.scheduled_time.date()
+
+    def get_time(self, obj):
+        return obj.scheduled_time.time().strftime('%H:%M:%S')
+
+
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ("id", "username", "email", "user_type","is_profile_complete")
+        fields = ("id", "username", "email", "user_type", "is_profile_complete")
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -27,10 +51,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs["password"] != attrs["passwordcheck"]:
             raise serializers.ValidationError("Passwords do not match.")
-
         if len(attrs["password"]) < 8:
             raise serializers.ValidationError("Password must be at least 8 characters.")
-
         return attrs
 
     def create(self, validated_data):
@@ -50,26 +72,39 @@ class UserLoginSerializer(serializers.Serializer):
         raise serializers.ValidationError("Incorrect credentials.")
 
 
-
-
 class PatientSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
-    therapist = serializers.PrimaryKeyRelatedField(
-        queryset=Therapist.objects.all(),
-        required=False,
-        allow_null=True
-    )
+    therapist = serializers.PrimaryKeyRelatedField(queryset=Therapist.objects.all(), required=False, allow_null=True)
     diagnosis = serializers.CharField(required=False, allow_blank=True)
-    # therapist = serializers.PrimaryKeyRelatedField(
-    #     queryset=Therapist.objects.all(),
-    #     required=False,
-    #     allow_null=True
-    # )
+    age = serializers.IntegerField(required=True)
+    appointments = AppointmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Patient
         fields = [
-            'user', 
+            'user', 'age', 'gender', 'sibling_order',
+            'diagnosis', 'marital_status', 'therapist', 'appointments'
+        ]
+
+    def validate_age(self, value):
+        if value < 18 or value > 90:
+            raise serializers.ValidationError("Age must be between 18 and 90")
+        return value
+
+    def validate_gender(self, value):
+        if value.lower() not in ['male', 'female']:
+            raise serializers.ValidationError("Gender must be either male or female")
+        return value.lower()
+
+        return value.lower()
+
+class SimplePatientSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+
+    class Meta:
+        model = Patient
+        fields = [
+            'user',
             'age',
             'gender',
             'sibling_order',
@@ -77,15 +112,6 @@ class PatientSerializer(serializers.ModelSerializer):
             'marital_status',
             'therapist'
         ]
-    def validate_age(self, value):
-        if value < 18 or value > 90:
-            raise serializers.ValidationError("Age must be between 18 and 90")
-        return value
-        
-    def validate_gender(self, value):
-        if value.lower() not in ['male', 'female']:
-            raise serializers.ValidationError("Gender must be either male or female")
-        return value.lower()
 
 
 class TherapistSerializer(serializers.ModelSerializer):
@@ -160,17 +186,29 @@ class TherapistSerializer(serializers.ModelSerializer):
         }
 
 
-class FullProfileSerializer(serializers.Serializer):
-    user = CustomUserSerializer(read_only=True)
-    profile = serializers.SerializerMethodField()
+class FullProfileSerializer(serializers.ModelSerializer):
+    age = serializers.SerializerMethodField()
+    gender = serializers.SerializerMethodField()
+    marital_status = serializers.SerializerMethodField()
+    sibling_order = serializers.SerializerMethodField()
 
-    def get_profile(self, obj):
-        if obj.user_type == 'therapist':
-            therapist = Therapist.objects.filter(user=obj).first()
-            if therapist:
-                serializer = TherapistSerializer(therapist)
-                return serializer.data
-        return None
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'user_type', 'is_profile_complete',
+                  'age', 'gender', 'marital_status', 'sibling_order']
+
+    def get_age(self, obj):
+        return getattr(obj.patient, 'age', None)
+
+    def get_gender(self, obj):
+        return getattr(obj.patient, 'gender', None)
+
+    def get_marital_status(self, obj):
+        return getattr(obj.patient, 'marital_status', None)
+
+    def get_sibling_order(self, obj):
+        return getattr(obj.patient, 'sibling_order', None)
+
 
 class TreatmentGoalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -200,7 +238,7 @@ class TreatmentPlanSerializer(serializers.ModelSerializer):
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    patient = PatientSerializer(read_only=True)
+    patient = SimplePatientSerializer(read_only=True)
     date = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
 
@@ -342,3 +380,18 @@ class AppointmentCreateSerializer(serializers.ModelSerializer):
         if data['end_time'] <= data['scheduled_time']:
             raise serializers.ValidationError("End time must be after start time")
         return data
+
+
+class ProfileRouterSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        if instance.user_type == 'patient':
+            if hasattr(instance, 'patient'):
+                return PatientSerializer(instance.patient).data
+            return {"error": "Patient profile not found."}
+
+        elif instance.user_type == 'therapist':
+            if hasattr(instance, 'therapist'):
+                return TherapistSerializer(instance.therapist).data
+            return {"error": "Therapist profile not found."}
+
+        return CustomUserSerializer(instance).data
